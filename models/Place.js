@@ -8,6 +8,6 @@ const PlaceSchema = new mongoose.Schema({
     lat:{ type: String, required: true },
     lng:{ type: String, required: true  }
   },
-  creator:{ type: String, required: true}
+  creator:{ type: mongoose.Types.ObjectId,required:true,ref:"User"}
 });
 module.exports=mongoose.model("Place",PlaceSchema)
