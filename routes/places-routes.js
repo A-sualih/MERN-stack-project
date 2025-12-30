@@ -2,7 +2,7 @@ const express = require('express');
 const { check } = require('express-validator');
 const fileUploade = require('../middleware/file-upload');
 const placesControllers = require('../controllers/places-controllers');
-
+const checkAuth=require('../middleware/check-auth')
 const router = express.Router();
 
 // 🔥 FIX: specific route FIRST
@@ -10,7 +10,7 @@ router.get('/user/:uid', placesControllers.getPlacesByUserId);
 
 // generic route AFTER
 router.get('/:pid', placesControllers.getPlaceById);
-
+router.use(checkAuth)
 router.post(
   '/',
   fileUploade.single('image'),
