@@ -1,5 +1,6 @@
 const { validationResult } = require('express-validator');
 const mongoose = require('mongoose');
+const fs=require('fs')
 const Place = require("../models/Place.js");
 const User = require("../models/user.js");
 const HttpError = require('../models/http-error');
@@ -30,18 +31,12 @@ const getPlacesByUserId = async (req, res, next) => {
   try {
     places = await Place.find({ creator: userId });
   } catch (err) {
-    console.error("Database error:", err); // <-- log the actual error
     return next(
       new HttpError("Fetching places failed, please try again.", 500)
     );
   }
 
-  if (!places || places.length === 0) {
-    return next(
-      new HttpError("Could not find places for the provided user id.", 404)
-    );
-  }
-
+  // ✅ return empty array if no places
   res.json({
     places: places.map(place => place.toObject({ getters: true }))
   });
@@ -69,7 +64,8 @@ const createPlace = async (req, res, next) => {
     title,
     description,
     location: coordinates,
-    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88MFE2yUrzlrY7Lmh0uWLi6hnt3mHRTMqIg&s',
+    image:req.file.path,
+    //  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88MFE2yUrzlrY7Lmh0uWLi6hnt3mHRTMqIg&s',
     address,
     creator
   });
@@ -149,6 +145,7 @@ const deletePlace = async (req, res, next) => {
   if (!place) {
     return next(new HttpError("Place not found.", 404));
   }
+  const imagePath=place.image;
   const sess = await mongoose.startSession();
   sess.startTransaction();
   try {
@@ -163,6 +160,9 @@ const deletePlace = async (req, res, next) => {
     sess.endSession();
     return next(new HttpError("Deleting place failed, please try again", 500));
   }
+  fs.unlink(imagePath,err=>{
+    console.log(err)
+  })
   res.status(200).json({ message: 'Deleted place.' });
 };
 exports.getPlaceById = getPlaceById;

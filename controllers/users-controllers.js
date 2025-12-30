@@ -1,16 +1,9 @@
 const uuid = require('uuid/v4');
 const { validationResult } = require('express-validator');
 const User=require("../models/user")
+const bcrypt=require('bcryptjs')
+const fs = require("fs");
 const HttpError = require('../models/http-error');
-// const DUMMY_USERS = [
-//   {
-//     id: 'u1',
-//     name: 'Max Schwarz',
-//     email: 'test@test.com',
-//     password: 'testers'
-//   }
-// ];
-
 const getUsers =async (req, res, next) => {
   let users
   try {
@@ -21,11 +14,19 @@ const getUsers =async (req, res, next) => {
   }
   res.json({ users: users.map(user=>user.toObject({getters:true})) });
 };
+
+
 const signup = async (req, res, next) => {
   const errors = validationResult(req);
+
   if (!errors.isEmpty()) {
+    if (req.file) {
+      fs.unlink(req.file.path, err => {
+        if (err) console.log(err);
+      });
+    }
     return next(
-      new HttpError('Invalid inputs passed, please check your data.', 422)
+      new HttpError("Invalid inputs passed, please check your data.", 422)
     );
   }
 
@@ -35,30 +36,63 @@ const signup = async (req, res, next) => {
   try {
     existingUser = await User.findOne({ email });
   } catch (err) {
-    return next(new HttpError("Signing up failed, please try again.", 500));
-  }
-
-  if (existingUser) {
+    if (req.file) {
+      fs.unlink(req.file.path, err => {
+        if (err) console.log(err);
+      });
+    }
     return next(
-      new HttpError('Could not create user, email already exists.', 422)
+      new HttpError("Signing up failed, please try again.", 500)
     );
   }
+
+  // 🔴 THIS WAS MISSING
+  if (existingUser) {
+    if (req.file) {
+      fs.unlink(req.file.path, err => {
+        if (err) console.log(err);
+      });
+    }
+    return next(
+      new HttpError("Could not create user, email already exists.", 422)
+    );
+  }
+let hashPassword;
+try {
+  await bcrypt.hash(password,12)
+} catch (err) {
+ const error=new HttpError("Couldnot create user, please try again",500);
+ return next(error)
+}
 
   const createdUser = new User({
     name,
     email,
-    password, // ⚠ In production, hash the password!
-    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88MFE2yUrzlrY7Lmh0uWLi6hnt3mHRTMqIg&s',
+    password:hashPassword,
+    image: req.file
+      ? req.file.path
+      : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88MFE2yUrzlrY7Lmh0uWLi6hnt3mHRTMqIg&s",
     places: []
   });
 
   try {
     await createdUser.save();
   } catch (err) {
-    return next(new HttpError("Sign up failed, please try again.", 500));
+    if (req.file) {
+      fs.unlink(req.file.path, err => {
+        if (err) console.log(err);
+      });
+    }
+    return next(
+      new HttpError("Sign up failed, please try again.", 500)
+    );
   }
-  res.status(201).json({ user: createdUser.toObject({ getters: true }) });
+
+  res.status(201).json({
+    user: createdUser.toObject({ getters: true })
+  });
 };
+
 
 const login = async(req, res, next) => {
   const { email, password } = req.body;
@@ -74,6 +108,17 @@ try {
     const error= new HttpError('Invalid credential, credentials seem to be wrong.', 401);
     return next(error)
   }
+  let isValidPassword=false;
+  try {
+      isValidPassword=await bcrypt.coompare(password,identifiedUser.password)
+  } catch (err) {
+    const error=new HttpError("Could not log you in please check your credentials and try again",500);
+    return next(error)
+  }
+if(!isValidPassword){
+      const error= new HttpError('Invalid credential, credentials seem to be wrong.', 401);
+    return next(error)
+}
   res.json({message: 'Logged in!',user:identifiedUser.toObject({getters:true})});
 };
 
