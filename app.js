@@ -2,7 +2,7 @@ const express = require('express');
 
 // const cors = require('cors');
 const bodyParser = require('body-parser');
-const path=require('path');
+const path = require('path');
 const mongoose = require("mongoose");
 const placesRoutes = require('./routes/places-routes');
 const usersRoutes = require('./routes/users-routes');
@@ -10,7 +10,7 @@ const HttpError = require('./models/http-error');
 
 const app = express();
 // app.use(cors)
-app.use('/uploads/images',express.static(path.join('uploads','images')));
+app.use('/uploads/images', express.static(path.join('uploads', 'images')));
 app.use(bodyParser.json());
 app.use((req, res, next) => {
 
@@ -35,9 +35,18 @@ app.use((error, req, res, next) => {
   if (res.headerSent) {
     return next(error);
   }
+
+  console.error("Global Error Handler detected:", error);
+  const logMessage = `[${new Date().toISOString()}] Global Error: ${error.message}\n${error.stack}\n\n`;
+  const fs = require('fs');
+  try {
+    fs.appendFileSync('backend-error.log', logMessage);
+  } catch (e) {
+    console.error("Could not write to log file:", e);
+  }
+
   res.status(error.code || 500)
   res.json({ message: error.message || 'An unknown error occurred!' });
-
 });
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });

@@ -10,6 +10,7 @@ const getUsers = async (req, res, next) => {
   try {
     users = await User.find({}, "-password");
   } catch (err) {
+    console.error(err);
     const error = new HttpError("Signing Up failed", 500);
     return next(error);
   }
@@ -36,6 +37,7 @@ const signup = async (req, res, next) => {
   try {
     existingUser = await User.findOne({ email });
   } catch (err) {
+    console.error(err);
     if (req.file) {
       fs.unlink(req.file.path, (err) => {
         if (err) console.log(err);
@@ -59,6 +61,7 @@ const signup = async (req, res, next) => {
   try {
     hashPassword = await bcrypt.hash(password, 12);
   } catch (err) {
+    console.error(err);
     const error = new HttpError("Couldnot create user, please try again", 500);
     return next(error);
   }
@@ -76,6 +79,7 @@ const signup = async (req, res, next) => {
   try {
     await createdUser.save();
   } catch (err) {
+    console.error(err);
     if (req.file) {
       fs.unlink(req.file.path, (err) => {
         if (err) console.log(err);
@@ -91,6 +95,7 @@ const signup = async (req, res, next) => {
       { expiresIn: "1h" }
     );
   } catch (err) {
+    console.error(err);
     const error = new HttpError("Couldnot create user, please try again", 500);
     return next(error);
   }
@@ -107,11 +112,12 @@ const login = async (req, res, next) => {
   try {
     identifiedUser = await User.findOne({ email: email });
   } catch (err) {
+    console.error(err);
     const error = new HttpError("Logged Up failed", 500);
     return next(error);
   }
   // const identifiedUser = DUMMY_USERS.find(u => u.email === email);
-  if (!identifiedUser || identifiedUser.password !== password) {
+  if (!identifiedUser) {
     const error = new HttpError(
       "Invalid credential, credentials seem to be wrong.",
       401
@@ -122,6 +128,7 @@ const login = async (req, res, next) => {
   try {
     isValidPassword = await bcrypt.compare(password, identifiedUser.password);
   } catch (err) {
+    console.error(err);
     const error = new HttpError(
       "Could not log you in please check your credentials and try again",
       500
@@ -143,6 +150,7 @@ const login = async (req, res, next) => {
       { expiresIn: "1h" }
     );
   } catch (err) {
+    console.error(err);
     const error = new HttpError(
       "Could not log you in please check your credentials and try again",
       500
@@ -150,7 +158,7 @@ const login = async (req, res, next) => {
     return next(error);
   }
   res.json({
-    useId: identifiedUser.id,
+    userId: identifiedUser.id,
     email: identifiedUser.email,
     token: token,
   });

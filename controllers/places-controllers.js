@@ -1,6 +1,6 @@
 const { validationResult } = require('express-validator');
 const mongoose = require('mongoose');
-const fs=require('fs')
+const fs = require('fs')
 const Place = require("../models/Place.js");
 const User = require("../models/user.js");
 const HttpError = require('../models/http-error');
@@ -13,6 +13,7 @@ const getPlaceById = async (req, res, next) => {
   try {
     place = await Place.findById(placeId);
   } catch (err) {
+    console.error(err);
     return next(new HttpError("Something went wrong, could not find a place.", 500));
   }
 
@@ -27,10 +28,15 @@ const getPlaceById = async (req, res, next) => {
 const getPlacesByUserId = async (req, res, next) => {
   const userId = req.params.uid;
 
+  if (userId === 'undefined' || userId === 'null' || !userId) {
+    return next(new HttpError("Invalid User ID provided.", 422));
+  }
+
   let places;
   try {
     places = await Place.find({ creator: userId });
   } catch (err) {
+    console.error(err);
     return next(
       new HttpError("Fetching places failed, please try again.", 500)
     );
@@ -52,11 +58,18 @@ const createPlace = async (req, res, next) => {
   }
 
   const { title, description, address, creator } = req.body;
+  console.log("CreatePlace Request Body:", req.body);
+  console.log("CreatePlace Request File:", req.file);
+
+  if (creator === 'undefined' || creator === 'null' || !creator) {
+    return next(new HttpError("Invalid Creator ID provided.", 422));
+  }
 
   let coordinates;
   try {
     coordinates = await getCoordsForAddress(address);
   } catch (error) {
+    console.error(error);
     return next(error);
   }
 
@@ -64,16 +77,27 @@ const createPlace = async (req, res, next) => {
     title,
     description,
     location: coordinates,
-    image:req.file.path,
-    //  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88MFE2yUrzlrY7Lmh0uWLi6hnt3mHRTMqIg&s',
+    image: req.file ? req.file.path : 'uploads/images/default.png', // Fallback or handle error
     address,
     creator
   });
+
+  if (!req.file) {
+    return next(new HttpError('No image provided.', 422));
+  }
+
 
   let user;
   try {
     user = await User.findById(creator);
   } catch (err) {
+    console.error(err);
+    const logMessage = `[${new Date().toISOString()}] Create Place Error: ${err.message}\n${err.stack}\n\n`;
+    try {
+      fs.appendFileSync('backend-error.log', logMessage);
+    } catch (e) {
+      console.error("Could not write to log file:", e);
+    }
     return next(new HttpError("Creating place failed, please try again", 500));
   }
 
@@ -90,6 +114,7 @@ const createPlace = async (req, res, next) => {
     await sess.commitTransaction();
     sess.endSession();
   } catch (err) {
+    console.error(err);
     await sess.abortTransaction();
     sess.endSession();
     return next(new HttpError("Creating place failed, please try again", 500));
@@ -112,6 +137,7 @@ const updatePlace = async (req, res, next) => {
   try {
     updatedPlace = await Place.findById(placeId);
   } catch (err) {
+    console.error(err);
     return next(new HttpError("Updating place failed, please try again", 500));
   }
 
@@ -126,6 +152,7 @@ const updatePlace = async (req, res, next) => {
   try {
     await updatedPlace.save();
   } catch (err) {
+    console.error(err);
     return next(new HttpError("Updating place failed, please try again", 500));
   }
 
@@ -140,12 +167,13 @@ const deletePlace = async (req, res, next) => {
   try {
     place = await Place.findById(placeId).populate('creator');
   } catch (err) {
+    console.error(err);
     return next(new HttpError("Deleting place failed, please try again", 500));
   }
   if (!place) {
     return next(new HttpError("Place not found.", 404));
   }
-  const imagePath=place.image;
+  const imagePath = place.image;
   const sess = await mongoose.startSession();
   sess.startTransaction();
   try {
@@ -160,7 +188,7 @@ const deletePlace = async (req, res, next) => {
     sess.endSession();
     return next(new HttpError("Deleting place failed, please try again", 500));
   }
-  fs.unlink(imagePath,err=>{
+  fs.unlink(imagePath, err => {
     console.log(err)
   })
   res.status(200).json({ message: 'Deleted place.' });
