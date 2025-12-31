@@ -5,6 +5,7 @@ const Place = require("../models/Place.js");
 const User = require("../models/user.js");
 const HttpError = require('../models/http-error');
 const getCoordsForAddress = require('../util/location');
+const { error } = require('console');
 
 // Get a place by its ID
 const getPlaceById = async (req, res, next) => {
@@ -140,12 +141,17 @@ const updatePlace = async (req, res, next) => {
     console.error(err);
     return next(new HttpError("Updating place failed, please try again", 500));
   }
-
+if(updatePlace.creator.toString()!==req.userData.userId){
+  const error=new HttpError("You are not allowed to edit this place",401)
+  return next(error)
+}
   if (!updatedPlace) {
-    return next(new HttpError("Place not found.", 404));
+    return next(new HttpError("Place not found.", 500));
   }
 
+
   // Update only the fields you have
+  
   if (title) updatedPlace.title = title;
   if (description) updatedPlace.description = description;
 
