@@ -94,5 +94,4 @@ const navigate = useNavigate();
     </React.Fragment>
   );
 };
-
 export default NewPlace;

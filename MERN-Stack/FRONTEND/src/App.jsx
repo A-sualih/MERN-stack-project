@@ -19,8 +19,8 @@ function App() {
   const [token, setToken] = useState(false);
   const [userId, setUserId] = useState(null);
 
-  const login = useCallback((uid,token) => {
-    setToken(true);
+  const login = useCallback((uid, token) => {
+    setToken(token);
     setUserId(uid);
   }, []);
 
@@ -56,7 +56,7 @@ function App() {
     <AuthContext.Provider
       value={{
         isLoggedIn: !!token,
-        token:token,
+        token: token,
         userId: userId,
         login: login,
         logout: logout,
