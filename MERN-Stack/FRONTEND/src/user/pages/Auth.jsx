@@ -53,7 +53,7 @@ const Auth = () => {
 
         console.log(responseData);
 
-        auth.login(responseData.user.id);
+        auth.login(responseData.userId,responseData.token);
       } catch (error) {
         console.log(error);
       }
@@ -78,7 +78,7 @@ const Auth = () => {
           // }
         );
 
-        auth.login(responseData.user.id);
+        auth.login(responseData.userId,responseData.token);
         console.log(responseData);
       } catch (error) {
         console.log(error);
