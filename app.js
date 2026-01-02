@@ -52,7 +52,7 @@ app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });
 
-mongoose.connect("mongodb+srv://mern-stack-23:do8G1nw4SIGGscwY@nodejsproject.kfov0sa.mongodb.net/Places?appName=nodejsproject").then(() => {
+mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@nodejsproject.kfov0sa.mongodb.net/Places?appName=nodejsproject`).then(() => {
   app.listen(5001, () => {
     console.log("Listening to Port 5001")
   });

@@ -120,17 +120,14 @@ const createPlace = async (req, res, next) => {
     sess.endSession();
     return next(new HttpError("Creating place failed, please try again", 500));
   }
-
   res.status(201).json({ place: createdPlace.toObject({ getters: true }) });
 };
-
 // Update a place
 const updatePlace = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return next(new HttpError('Invalid inputs passed, please check your data.', 422));
   }
-
   const { title, description } = req.body; // only these
   const placeId = req.params.pid;
 
