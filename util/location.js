@@ -1,8 +1,7 @@
 const axios = require('axios');
 const HttpError = require('../models/http-error');
 
-const API_KEY = 'AIzaSyBpEdyW_pzIPTppiEV3kDvhFE9YawOwdVQ'; // ❗ move to env in real apps
-
+const API_KEY = process.env.GOOGLE_API_KEY; // ❗ move to env in real apps
 async function getCoordsForAddress(address) {
   // If you want to use the real Google API, ensure it's enabled in your console.
   // For now, we'll return mock coordinates if the API fails or is restricted.

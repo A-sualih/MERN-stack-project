@@ -3,6 +3,7 @@
     "DB_USER":"mern-stack-23",
     "DB_PASSWORD":"do8G1nw4SIGGscwY",
     "DB_NAME":"Places",
+    "GOOGLE_API_KEY":"...",
     "JWT_KEY":"supersecret_dontshare"
     }
 }
