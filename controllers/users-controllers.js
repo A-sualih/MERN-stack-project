@@ -21,11 +21,6 @@ const signup = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    if (req.file) {
-      fs.unlink(req.file.path, (err) => {
-        if (err) console.log(err);
-      });
-    }
     return next(
       new HttpError("Invalid inputs passed, please check your data.", 422)
     );
@@ -38,21 +33,11 @@ const signup = async (req, res, next) => {
     existingUser = await User.findOne({ email });
   } catch (err) {
     console.error(err);
-    if (req.file) {
-      fs.unlink(req.file.path, (err) => {
-        if (err) console.log(err);
-      });
-    }
     return next(new HttpError("Signing up failed, please try again.", 500));
   }
 
   // 🔴 THIS WAS MISSING
   if (existingUser) {
-    if (req.file) {
-      fs.unlink(req.file.path, (err) => {
-        if (err) console.log(err);
-      });
-    }
     return next(
       new HttpError("Could not create user, email already exists.", 422)
     );
@@ -80,11 +65,6 @@ const signup = async (req, res, next) => {
     await createdUser.save();
   } catch (err) {
     console.error(err);
-    if (req.file) {
-      fs.unlink(req.file.path, (err) => {
-        if (err) console.log(err);
-      });
-    }
     return next(new HttpError("Sign up failed, please try again.", 500));
   }
   let token;
