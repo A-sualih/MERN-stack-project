@@ -1,4 +1,4 @@
-const uuid = require("uuid/v4");
+const { v4: uuid } = require("uuid");
 const { validationResult } = require("express-validator");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
@@ -21,11 +21,6 @@ const signup = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    if (req.file) {
-      fs.unlink(req.file.path, (err) => {
-        if (err) console.log(err);
-      });
-    }
     return next(
       new HttpError("Invalid inputs passed, please check your data.", 422)
     );
@@ -38,21 +33,11 @@ const signup = async (req, res, next) => {
     existingUser = await User.findOne({ email });
   } catch (err) {
     console.error(err);
-    if (req.file) {
-      fs.unlink(req.file.path, (err) => {
-        if (err) console.log(err);
-      });
-    }
     return next(new HttpError("Signing up failed, please try again.", 500));
   }
 
   // 🔴 THIS WAS MISSING
   if (existingUser) {
-    if (req.file) {
-      fs.unlink(req.file.path, (err) => {
-        if (err) console.log(err);
-      });
-    }
     return next(
       new HttpError("Could not create user, email already exists.", 422)
     );
@@ -80,18 +65,13 @@ const signup = async (req, res, next) => {
     await createdUser.save();
   } catch (err) {
     console.error(err);
-    if (req.file) {
-      fs.unlink(req.file.path, (err) => {
-        if (err) console.log(err);
-      });
-    }
     return next(new HttpError("Sign up failed, please try again.", 500));
   }
   let token;
   try {
     token = jwt.sign(
-      { useId: createdUser.id, email: createdUser.email },
-      "supersecret_dontshare",
+      { userId: createdUser.id, email: createdUser.email },
+      process.env.JWT_KEY,
       { expiresIn: "1h" }
     );
   } catch (err) {
@@ -146,7 +126,7 @@ const login = async (req, res, next) => {
   try {
     token = jwt.sign(
       { userId: identifiedUser.id, email: identifiedUser.email },
-      "supersecret_dontshare",
+      process.env.JWT_KEY,
       { expiresIn: "1h" }
     );
   } catch (err) {
