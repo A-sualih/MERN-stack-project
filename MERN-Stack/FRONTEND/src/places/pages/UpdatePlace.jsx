@@ -16,8 +16,8 @@ import { useHttpClient } from "../../shared/hooks/http-hook";
 import LoadingSpinner from "../../shared/components/UIElement/LoadingSpinner";
 import ErrorModal from "../../shared/components/UIElement/ErrorModal";
 const UpdatePlace = () => {
-  const navigate=useNavigate();
-  const auth=useContext(AuthContext)
+  const navigate = useNavigate();
+  const auth = useContext(AuthContext)
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const { placeId } = useParams();
   const [loadedPlace, setLoadedPlace] = useState();
@@ -32,7 +32,7 @@ const UpdatePlace = () => {
     const fetchPlace = async () => {
       try {
         const responseData = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/places/${placeId}`
+          `${import.meta.env.VITE_BACKEND_URL}/places/${placeId}`
         );
 
         setLoadedPlace(responseData.place);
@@ -50,7 +50,7 @@ const UpdatePlace = () => {
           },
           true
         );
-      } catch (err) {}
+      } catch (err) { }
     };
 
     fetchPlace();
@@ -61,7 +61,7 @@ const UpdatePlace = () => {
 
     try {
       await sendRequest(
-        `http://localhost:5001/api/places/${placeId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/places/${placeId}`,
         "PATCH",
         JSON.stringify({
           title: formState.inputs.title.value,
@@ -69,11 +69,11 @@ const UpdatePlace = () => {
         }),
         {
           "Content-Type": "application/json",
-          Authorization:"Bearer " + auth.token
+          Authorization: "Bearer " + auth.token
         }
       );
-      navigate('/' +auth.userId +'/places')
-    } catch (err) {}
+      navigate('/' + auth.userId + '/places')
+    } catch (err) { }
   };
 
   if (isLoading) {
