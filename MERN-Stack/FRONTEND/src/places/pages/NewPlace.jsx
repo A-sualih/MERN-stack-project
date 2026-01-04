@@ -12,7 +12,7 @@ import { useHttpClient } from "../../shared/hooks/http-hook";
 import ErrorModal from "../../shared/components/UIElement/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElement/LoadingSpinner";
 import ImageUploade from '../../shared/components/FormElements/ImageUploade'
-    import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // Reducer for form state
 
 const NewPlace = () => {
@@ -23,26 +23,27 @@ const NewPlace = () => {
       title: { value: "", isValid: false },
       description: { value: "", isValid: false },
       address: { value: "", isValid: false },
-      image:{
-        value:null,
-        isValid:false,
+      image: {
+        value: null,
+        isValid: false,
       }
     },
     false
   );
-const navigate = useNavigate();
+  const navigate = useNavigate();
   // Handle form submission
- const placeSubmitHandler = async (event) => {
-  event.preventDefault();
+  const placeSubmitHandler = async (event) => {
+    event.preventDefault();
 
-  try {
-    const formData = new FormData();
-    formData.append("title", formState.inputs.title.value);
-    formData.append("description", formState.inputs.description.value);
-    formData.append("address", formState.inputs.address.value); // ✅ FIXED
-    formData.append("creator", auth.userId);
-    formData.append("image", formState.inputs.image.value);
+    try {
+      const formData = new FormData();
+      formData.append("title", formState.inputs.title.value);
+      formData.append("description", formState.inputs.description.value);
+      formData.append("address", formState.inputs.address.value); // ✅ FIXED
+      formData.append("creator", auth.userId);
+      formData.append("image", formState.inputs.image.value);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     await sendRequest(
        process.env.REACT_APP_BACKEND_URL+"/places",
@@ -55,46 +56,55 @@ const navigate = useNavigate();
         Authorization: "Bearer " + auth.token // ✅ if auth enabled
       }
     );
+=======
+      await sendRequest(import.meta.env.VITE_BACKEND_URL + "/places",
+        "POST",
+        formData,
+        {
+          Authorization: "Bearer " + auth.token // ✅ if auth enabled
+        }
+      );
+>>>>>>> 55dc9d8a0a31d4443dfcaf7321c1a26b66355ba9
 
-    navigate("/");
-  } catch (err) {}
-};
+      navigate("/");
+    } catch (err) { }
+  };
 
   return (
     <React.Fragment>
-      <ErrorModal error={error} onClear={clearError}/>
-    <form className="place-form" onSubmit={placeSubmitHandler}>
-      {isLoading && <LoadingSpinner asOverlay/> }
-      <Input
-        id="title"
-        element="input"
-        type="text"
-        label="Title"
-        validators={[VALIDATOR_REQUIRE()]}
-        errorText="Please enter a valid title."
-        onInput={inputHandler}
-      />
-      <Input
-        id="description"
-        element="textarea"
-        label="Description"
-        validators={[VALIDATOR_MINLENGTH(5)]}
-        errorText="Please enter a valid description (min. 5 characters)."
-        onInput={inputHandler}
-      />
-      <Input
-        id="address"
-        element="input"
-        label="Address"
-        validators={[VALIDATOR_REQUIRE()]}
-        errorText="Please enter a valid address."
-        onInput={inputHandler}
-      />
-      <ImageUploade id="image" onInput={inputHandler} errorText="Please provide an image"/>
-      <Button type="submit" disabled={!formState.isValid}>
-        ADD PLACE
-      </Button>
-    </form>
+      <ErrorModal error={error} onClear={clearError} />
+      <form className="place-form" onSubmit={placeSubmitHandler}>
+        {isLoading && <LoadingSpinner asOverlay />}
+        <Input
+          id="title"
+          element="input"
+          type="text"
+          label="Title"
+          validators={[VALIDATOR_REQUIRE()]}
+          errorText="Please enter a valid title."
+          onInput={inputHandler}
+        />
+        <Input
+          id="description"
+          element="textarea"
+          label="Description"
+          validators={[VALIDATOR_MINLENGTH(5)]}
+          errorText="Please enter a valid description (min. 5 characters)."
+          onInput={inputHandler}
+        />
+        <Input
+          id="address"
+          element="input"
+          label="Address"
+          validators={[VALIDATOR_REQUIRE()]}
+          errorText="Please enter a valid address."
+          onInput={inputHandler}
+        />
+        <ImageUploade id="image" onInput={inputHandler} errorText="Please provide an image" />
+        <Button type="submit" disabled={!formState.isValid}>
+          ADD PLACE
+        </Button>
+      </form>
     </React.Fragment>
   );
 };

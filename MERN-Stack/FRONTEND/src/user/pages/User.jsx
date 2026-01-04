@@ -11,7 +11,7 @@ const User = () => {
     const sendRequest = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch( process.env.REACT_APP_BACKEND_URL+"/users");
+        const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/users");
         const responseData = await response.json();
 
         if (!response.ok) {

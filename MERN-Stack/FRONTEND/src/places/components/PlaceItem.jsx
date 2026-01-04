@@ -10,6 +10,17 @@ import ErrorModal from "../../shared/components/UIElement/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElement/LoadingSpinner";
 const PlaceItem = (props) => {
   const auth = useContext(AuthContext);
+
+  let image = props.image;
+  if (image && !image.startsWith('http')) {
+    const assetUrl = import.meta.env.VITE_ASSET_URL;
+    const cleanImage = image.replace(/\\/g, "/");
+    if (assetUrl.includes("uploads/images") && cleanImage.startsWith("uploads/images")) {
+      image = `${assetUrl}/${cleanImage.replace("uploads/images/", "")}`;
+    } else {
+      image = `${assetUrl}/${cleanImage}`;
+    }
+  }
   const [showMap, setShowMap] = useState(false);
   const [showConfirmModal, setShowconfirmModal] = useState(false);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -30,10 +41,14 @@ const PlaceItem = (props) => {
     try {
       await sendRequest(
 <<<<<<< HEAD
+<<<<<<< HEAD
         process.env.REACT_APP_BACKEND_URL+`/places/${props.id}`,
 =======
         `${process.env.REACT_APP_BACKEND_URL}/${props.id}`,
 >>>>>>> 982d02b190fb7804b5f5a1ec5134ecf1fe0037da
+=======
+        `${import.meta.env.VITE_BACKEND_URL}/places/${props.id}`,
+>>>>>>> 55dc9d8a0a31d4443dfcaf7321c1a26b66355ba9
         "DELETE",
         null,
         {
@@ -82,7 +97,7 @@ const PlaceItem = (props) => {
         <Card className="place-item__content">
           {isLoading && <LoadingSpinner asOverlay />}
           <div className="place-item__image">
-            <img src={`${process.env.REACT_APP_ASSET_URL}/${props.image}`} alt={props.title} />
+            <img src={image} alt={props.title} />
           </div>
           <div className="place-item__info">
             <h2>{props.title}</h2>
