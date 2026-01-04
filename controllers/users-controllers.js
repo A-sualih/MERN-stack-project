@@ -1,4 +1,4 @@
-const uuid = require("uuid/v4");
+const { v4: uuid } = require("uuid");
 const { validationResult } = require("express-validator");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
@@ -90,8 +90,8 @@ const signup = async (req, res, next) => {
   let token;
   try {
     token = jwt.sign(
-      { useId: createdUser.id, email: createdUser.email },
- process.env.JWT_KEY,
+      { userId: createdUser.id, email: createdUser.email },
+      process.env.JWT_KEY,
       { expiresIn: "1h" }
     );
   } catch (err) {
