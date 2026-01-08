@@ -9,6 +9,7 @@ const Quran = () => {
     const [viewMode, setViewMode] = useState('page'); // 'surah' or 'page'
     const [currentPage, setCurrentPage] = useState(1);
     const [pageAyahs, setPageAyahs] = useState([]);
+    const [showIndex, setShowIndex] = useState(false);
 
     useEffect(() => {
         const fetchSurahs = async () => {
@@ -49,31 +50,65 @@ const Quran = () => {
             const responseData = await sendRequest(`http://localhost:5000/api/quran/${sid}`);
             setSelectedSurah(responseData.surah);
             setViewMode('surah');
+            setShowIndex(false); // Close index on selection
         } catch (err) { }
     };
 
+    const toggleIndex = () => setShowIndex(prev => !prev);
+
     const renderTajwid = (text) => {
-        // The API might return text with tajwid tags like [g], [i], etc.
-        // Or it might be HTML. We'll sanitize and map to our CSS classes.
         if (!text) return '';
 
         let processed = text;
-        // Example mapping for common Tajwid API tags
-        processed = processed.replace(/<b class="ghn">/g, '<span class="tajwid-ghn">');
-        processed = processed.replace(/<b class="ikh">/g, '<span class="tajwid-ikh">');
-        processed = processed.replace(/<b class="iql">/g, '<span class="tajwid-iql">');
-        processed = processed.replace(/<b class="idg">/g, '<span class="tajwid-idg">');
-        processed = processed.replace(/<b class="qal">/g, '<span class="tajwid-qal">');
-        processed = processed.replace(/<b class="mdd">/g, '<span class="tajwid-mdd">');
-        processed = processed.replace(/<\/b>/g, '</span>');
+        // Robust mapping for all common tags (b or span) to our simplified colors
+        // Green: Ghunnah, Idgham
+        processed = processed.replace(/<(b|span) class="(ghn|idg|idgh|idga|khf|mim)">/g, '<span class="tajwid-green">');
+        // Blue: Ikhfa, Iqlab, Hamza-Wasl
+        processed = processed.replace(/<(b|span) class="(ikh|iql|shf|ham_w)">/g, '<span class="tajwid-blue">');
+        // Red: Madd, Qalqalah
+        processed = processed.replace(/<(b|span) class="(mdd|qal)">/g, '<span class="tajwid-red">');
+
+        // Close tags
+        processed = processed.replace(/<\/(b|span)>/g, '</span>');
+
+        // Handle bracketed tags just in case
+        processed = processed.replace(/\[ghn\]/g, '<span class="tajwid-green">').replace(/\[\/ghn\]/g, '</span>');
+        processed = processed.replace(/\[mdd\]/g, '<span class="tajwid-red">').replace(/\[\/mdd\]/g, '</span>');
+        processed = processed.replace(/\[ikh\]/g, '<span class="tajwid-blue">').replace(/\[\/ikh\]/g, '</span>');
 
         return <span dangerouslySetInnerHTML={{ __html: processed }} />;
     };
 
     return (
         <div className="container">
+            {/* Surah Index Modal */}
+            <div className={`modal-overlay ${showIndex ? 'active' : ''}`} onClick={toggleIndex}>
+                <div className="modal-content" onClick={e => e.stopPropagation()}>
+                    <div className="modal-header">
+                        <h2 style={{ color: 'var(--primary-light)' }}>Surah Index</h2>
+                        <button className="close-btn" onClick={toggleIndex}>&times;</button>
+                    </div>
+                    <div className="surah-grid-modal">
+                        {surahs.map(s => (
+                            <div key={s.surahNumber} className="surah-card-small" onClick={() => selectSurahHandler(s.surahNumber)}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                    <span className="num">{s.surahNumber}</span>
+                                    <span style={{ fontWeight: '600' }}>{s.surahName}</span>
+                                </div>
+                                <span style={{ fontSize: '1.1rem', opacity: 0.7 }}>{s.surahNameArabic}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
-                <h1 style={{ color: 'var(--primary-light)' }}>The Holy Qur'an</h1>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                    <h1 style={{ color: 'var(--primary-light)', margin: 0 }}>The Holy Qur'an</h1>
+                    <button className="btn btn-outline" onClick={toggleIndex} style={{ padding: '8px 20px', borderRadius: '12px' }}>
+                        📖 SURAH INDEX
+                    </button>
+                </div>
                 <div className="glass" style={{ padding: '5px', borderRadius: '12px' }}>
                     <button
                         className={`btn ${viewMode === 'page' ? 'btn-primary' : ''}`}
@@ -94,29 +129,7 @@ const Quran = () => {
 
             {error && <p style={{ color: 'red' }}>{error}</p>}
 
-            <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: '30px' }}>
-                <div className="card glass" style={{ height: '75vh', overflowY: 'auto' }}>
-                    <h3 style={{ marginBottom: '15px' }}>Surahs</h3>
-                    <ul style={{ listStyle: 'none' }}>
-                        {surahs.map(s => (
-                            <li key={s.surahNumber}
-                                onClick={() => selectSurahHandler(s.surahNumber)}
-                                style={{
-                                    padding: '12px',
-                                    cursor: 'pointer',
-                                    borderRadius: '8px',
-                                    marginBottom: '5px',
-                                    transition: '0.2s',
-                                    background: selectedSurah?.surahNumber === s.surahNumber && viewMode === 'surah' ? 'var(--primary)' : 'transparent',
-                                    border: '1px solid var(--glass-border)'
-                                }}>
-                                <span style={{ fontWeight: '700', marginRight: '10px', color: 'var(--secondary-light)' }}>{s.surahNumber}</span>
-                                {s.surahName}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-
+            <div style={{ width: '100%', maxWidth: '1100px', margin: '0 auto' }}>
                 {viewMode === 'page' ? (
                     <div className="mushaf-container">
                         <div className="mushaf-page">
@@ -127,7 +140,7 @@ const Quran = () => {
                                 if (showHeader) {
                                     acc.push(
                                         <div key={`header-${a.surahNumber}`} className="surah-header-mushaf">
-                                            Surah {a.surahNameArabic}
+                                            {a.surahNameArabic}
                                         </div>
                                     );
                                     if (a.surahNumber !== 1 && a.surahNumber !== 9 && a.number === 1) {
@@ -151,44 +164,45 @@ const Quran = () => {
                         <div className="mushaf-controls">
                             <button
                                 className="btn btn-outline"
-                                disabled={currentPage === 604}
-                                onClick={() => setCurrentPage(prev => prev + 1)}
-                            >
-                                ← Previous Page
-                            </button>
-                            <div style={{ textAlign: 'center' }}>
-                                <span className="page-indicator">Page {currentPage} / 604</span>
-                            </div>
-                            <button
-                                className="btn btn-outline"
                                 disabled={currentPage === 1}
                                 onClick={() => setCurrentPage(prev => prev - 1)}
                             >
-                                Next Page →
+                                ← Previous
+                            </button>
+                            <div className="page-indicator">Page {currentPage} / 604</div>
+                            <button
+                                className="btn btn-outline"
+                                disabled={currentPage === 604}
+                                onClick={() => setCurrentPage(prev => prev + 1)}
+                            >
+                                Next →
                             </button>
                         </div>
                     </div>
                 ) : (
-                    <div className="card glass" style={{ height: '75vh', overflowY: 'auto' }}>
+                    <div className="card glass no-scroll" style={{ height: '80vh', overflowY: 'auto', padding: '40px' }}>
                         {selectedSurah ? (
                             <div>
                                 <h2 style={{ textAlign: 'center', marginBottom: '30px', color: 'var(--primary-light)' }}>
                                     {selectedSurah.surahName} <br />
-                                    <span style={{ fontSize: '2.5rem' }}>{selectedSurah.surahNameArabic}</span>
+                                    <span style={{ fontSize: '3rem', fontFamily: 'Amiri', marginTop: '10px', display: 'block' }}>{selectedSurah.surahNameArabic}</span>
                                 </h2>
                                 {selectedSurah.ayahs.map(a => (
-                                    <div key={a.number} style={{ marginBottom: '30px', padding: '20px', background: 'rgba(255,255,255,0.02)', borderRadius: '12px' }}>
-                                        <p style={{ fontSize: '1.8rem', textAlign: 'right', direction: 'rtl', marginBottom: '15px', lineHeight: '2' }}>
-                                            {renderTajwid(a.tajwidText || a.text)} ({a.number})
+                                    <div key={a.number} style={{ marginBottom: '40px', paddingBottom: '30px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                                        <p style={{ fontSize: '2.2rem', textAlign: 'right', direction: 'rtl', marginBottom: '20px', lineHeight: '2', fontFamily: 'Amiri' }}>
+                                            {renderTajwid(a.tajwidText || a.text)} <span style={{ color: 'var(--secondary-light)', fontSize: '1.2rem', marginRight: '10px' }}>﴿{a.number}﴾</span>
                                         </p>
-                                        <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>{a.translation}</p>
+                                        <p style={{ color: 'var(--text-muted)', fontSize: '1.2rem', fontStyle: 'italic' }}>{a.translation}</p>
                                     </div>
                                 ))}
                             </div>
                         ) : (
-                            <p style={{ textAlign: 'center', marginTop: '150px', color: 'var(--text-muted)', fontSize: '1.2rem' }}>
-                                Select a Surah from the list to start reading.
-                            </p>
+                            <div style={{ textAlign: 'center', marginTop: '150px' }}>
+                                <p style={{ color: 'var(--text-muted)', fontSize: '1.5rem', marginBottom: '30px' }}>
+                                    Select a Surah from the Index to start reading.
+                                </p>
+                                <button className="btn btn-primary" onClick={toggleIndex}>OPEN SURAH INDEX</button>
+                            </div>
                         )}
                     </div>
                 )}

@@ -10,6 +10,10 @@ const quranSchema = new Schema({
         text: { type: String, required: true },
         tajwidText: { type: String }, // HTML or tagged text for colorization
         translation: { type: String, required: true },
+        amharicTranslation: { type: String },
+        tafsir: {
+            ibnKathir: { type: String }
+        },
         page: { type: Number },
         juz: { type: Number }
     }]
