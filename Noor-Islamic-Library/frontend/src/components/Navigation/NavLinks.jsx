@@ -31,4 +31,18 @@ const NavLinks = () => {
             <li>
                 <NavLink to="/books">Books</NavLink>
             </li>
-           
+            {!auth.isLoggedIn && (
+                <li>
+                    <NavLink to="/auth">Authenticate</NavLink>
+                </li>
+            )}
+            {auth.isLoggedIn && (
+                <li>
+                    <button className="btn btn-outline" onClick={auth.logout}>LOGOUT</button>
+                </li>
+            )}
+        </ul>
+    );
+};
+
+export default NavLinks;

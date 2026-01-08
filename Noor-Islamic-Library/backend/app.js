@@ -24,6 +24,7 @@ app.use('/api/hadith', hadithRoutes);
 app.use('/api/books', booksRoutes);
 app.use('/api/notes', notesRoutes);
 app.use('/api/bookmarks', bookmarksRoutes);
+app.use('/api/library', libraryRoutes);
 
 app.get('/', (req, res) => {
     res.json({ message: 'Welcome to Noor Islamic Library API' });
@@ -50,4 +51,5 @@ mongoose
         });
     })
     .catch((err) => {
-       
+        console.log('MongoDB connection failed:', err);
+    });

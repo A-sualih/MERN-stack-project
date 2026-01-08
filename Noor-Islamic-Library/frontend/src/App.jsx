@@ -74,4 +74,15 @@ const App = () => {
         userId: userId,
         role: role,
         login: login,
-        logo
+        logout: logout
+      }}
+    >
+      <Router>
+        <MainNavigation />
+        <main>{routes}</main>
+      </Router>
+    </AuthContext.Provider>
+  );
+};
+
+export default App;
