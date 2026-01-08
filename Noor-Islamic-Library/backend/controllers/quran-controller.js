@@ -40,6 +40,32 @@ const searchQuran = async (req, res, next) => {
     res.json({ result: matches });
 };
 
+const getAyahsByPage = async (req, res, next) => {
+    const pageNumber = parseInt(req.params.page);
+    let pages;
+    try {
+        // We search across all surahs for ayahs that belong to this page
+        pages = await Quran.find({ 'ayahs.page': pageNumber });
+
+        // Flatten and filter the results to only include ayahs for this page
+        let resultAyahs = [];
+        pages.forEach(surah => {
+            const filtered = surah.ayahs.filter(a => a.page === pageNumber);
+            resultAyahs.push(...filtered.map(a => ({
+                ...a.toObject(),
+                surahName: surah.surahName,
+                surahNameArabic: surah.surahNameArabic,
+                surahNumber: surah.surahNumber
+            })));
+        });
+
+        res.json({ ayahs: resultAyahs });
+    } catch (err) {
+        return next(new HttpError('Fetching page failed, please try again later.', 500));
+    }
+};
+
 exports.getAllSurahs = getAllSurahs;
 exports.getSurahById = getSurahById;
 exports.searchQuran = searchQuran;
+exports.getAyahsByPage = getAyahsByPage;

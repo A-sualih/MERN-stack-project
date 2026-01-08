@@ -8,7 +8,10 @@ const quranSchema = new Schema({
     ayahs: [{
         number: { type: Number, required: true },
         text: { type: String, required: true },
-        translation: { type: String, required: true }
+        tajwidText: { type: String }, // HTML or tagged text for colorization
+        translation: { type: String, required: true },
+        page: { type: Number },
+        juz: { type: Number }
     }]
 });
 
