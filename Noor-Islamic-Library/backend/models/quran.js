@@ -12,7 +12,9 @@ const quranSchema = new Schema({
         translation: { type: String, required: true },
         amharicTranslation: { type: String },
         tafsir: {
-            ibnKathir: { type: String }
+            ibnKathir: { type: String },
+            ibnKathirArabic: { type: String },
+            muyassar: { type: String }
         },
         page: { type: Number },
         juz: { type: Number }

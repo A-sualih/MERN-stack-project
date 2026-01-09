@@ -10,6 +10,8 @@ const Quran = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageAyahs, setPageAyahs] = useState([]);
     const [showIndex, setShowIndex] = useState(false);
+    const [language, setLanguage] = useState('am'); // 'en' or 'am'
+    const [selectedAyahForTafsir, setSelectedAyahForTafsir] = useState(null);
 
     useEffect(() => {
         const fetchSurahs = async () => {
@@ -55,6 +57,7 @@ const Quran = () => {
     };
 
     const toggleIndex = () => setShowIndex(prev => !prev);
+    const toggleLanguage = () => setLanguage(prev => prev === 'en' ? 'am' : 'en');
 
     const renderTajwid = (text) => {
         if (!text) return '';
@@ -79,8 +82,92 @@ const Quran = () => {
         return <span dangerouslySetInnerHTML={{ __html: processed }} />;
     };
 
+    const handleAyahClick = (a) => {
+        setSelectedAyahForTafsir(a);
+    };
+
     return (
         <div className="container">
+            {/* Tafsir Modal */}
+            <div className={`modal-overlay ${selectedAyahForTafsir ? 'active' : ''}`} onClick={() => setSelectedAyahForTafsir(null)}>
+                <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '700px' }}>
+                    <div className="modal-header">
+                        <h2 style={{ color: 'var(--primary-light)' }}>
+                            Ayah {selectedAyahForTafsir?.number} Tafsir
+                        </h2>
+                        <button className="close-btn" onClick={() => setSelectedAyahForTafsir(null)}>&times;</button>
+                    </div>
+                    <div style={{ overflowY: 'auto', padding: '10px' }}>
+                        <p style={{
+                            fontSize: '2rem',
+                            textAlign: 'right',
+                            direction: 'rtl',
+                            fontFamily: 'Amiri',
+                            marginBottom: '20px',
+                            color: '#1a1a1a',
+                            background: '#fdf6e3',
+                            padding: '20px',
+                            borderRadius: '12px',
+                            border: '1px solid #d4af37'
+                        }}>
+                            {selectedAyahForTafsir && renderTajwid(selectedAyahForTafsir.tajwidText || selectedAyahForTafsir.text)}
+                        </p>
+                        <h4 style={{ color: 'var(--secondary-light)', marginBottom: '10px' }}>Translation ({language === 'en' ? 'English' : 'Amharic'})</h4>
+                        <p style={{ color: 'var(--text-light)', marginBottom: '25px', lineHeight: '1.6', fontSize: '1.1rem' }}>
+                            {language === 'en' ? selectedAyahForTafsir?.translation : selectedAyahForTafsir?.amharicTranslation}
+                        </p>
+
+                        <div style={{ padding: '20px', background: 'rgba(255,255,255,0.02)', borderRadius: '15px', border: '1px solid rgba(255,255,255,0.05)', marginBottom: '20px' }}>
+                            <h4 style={{ color: 'var(--secondary-light)', marginBottom: '15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <span>Arabic Tafsir (Vocalized)</span>
+                                <span style={{ fontFamily: 'Amiri', fontSize: '1.4rem' }}>تفسير الميسر - بالتشكيل</span>
+                            </h4>
+                            <div
+                                style={{
+                                    color: 'var(--text-light)',
+                                    lineHeight: '2.4',
+                                    fontSize: '1.6rem',
+                                    textAlign: 'right',
+                                    direction: 'rtl',
+                                    fontFamily: 'Amiri',
+                                    padding: '10px'
+                                }}
+                                dangerouslySetInnerHTML={{ __html: selectedAyahForTafsir?.tafsir?.muyassar || selectedAyahForTafsir?.tafsir?.ibnKathirArabic }}
+                            />
+                        </div>
+
+                        <div style={{ padding: '20px', background: 'rgba(255,255,255,0.01)', borderRadius: '15px', border: '1px solid rgba(255,255,255,0.03)' }}>
+                            <h4 style={{ color: 'var(--secondary-light)', marginBottom: '15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <span>Ibn Kathir (Classical)</span>
+                                <span style={{ fontFamily: 'Amiri', fontSize: '1.4rem' }}>تفسير ابن كثير</span>
+                            </h4>
+                            <div
+                                style={{
+                                    color: 'var(--text-muted)',
+                                    lineHeight: '2',
+                                    fontSize: '1.4rem',
+                                    textAlign: 'right',
+                                    direction: 'rtl',
+                                    fontFamily: 'Amiri',
+                                    padding: '10px'
+                                }}
+                                dangerouslySetInnerHTML={{ __html: selectedAyahForTafsir?.tafsir?.ibnKathirArabic }}
+                            />
+                        </div>
+
+                        {selectedAyahForTafsir?.tafsir?.ibnKathirArabic && (
+                            <div style={{ marginTop: '30px', opacity: 0.6 }}>
+                                <h4 style={{ color: 'var(--secondary-light)', marginBottom: '10px', fontSize: '0.9rem' }}>English Tafsir (Abridged)</h4>
+                                <div
+                                    style={{ color: 'var(--text-muted)', lineHeight: '1.6', fontSize: '0.9rem' }}
+                                    dangerouslySetInnerHTML={{ __html: selectedAyahForTafsir?.tafsir?.ibnKathir }}
+                                />
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+
             {/* Surah Index Modal */}
             <div className={`modal-overlay ${showIndex ? 'active' : ''}`} onClick={toggleIndex}>
                 <div className="modal-content" onClick={e => e.stopPropagation()}>
@@ -102,11 +189,14 @@ const Quran = () => {
                 </div>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', flexWrap: 'wrap', gap: '20px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
                     <h1 style={{ color: 'var(--primary-light)', margin: 0 }}>The Holy Qur'an</h1>
                     <button className="btn btn-outline" onClick={toggleIndex} style={{ padding: '8px 20px', borderRadius: '12px' }}>
                         📖 SURAH INDEX
+                    </button>
+                    <button className="btn btn-primary" onClick={toggleLanguage} style={{ padding: '8px 20px', borderRadius: '12px', fontSize: '0.8rem' }}>
+                        {language === 'en' ? 'ENGLISH ⇄ AMHARIC' : 'AMHARIC ⇄ ENGLISH'}
                     </button>
                 </div>
                 <div className="glass" style={{ padding: '5px', borderRadius: '12px' }}>
@@ -153,7 +243,7 @@ const Quran = () => {
                                 }
 
                                 acc.push(
-                                    <span key={`${a.surahNumber}-${a.number}`} className="ayah-wrapper">
+                                    <span key={`${a.surahNumber}-${a.number}`} className="ayah-wrapper" onClick={() => handleAyahClick(a)} style={{ cursor: 'pointer' }}>
                                         {renderTajwid(a.tajwidText || a.text)}
                                         <span className="ayah-end">{a.number}</span>
                                     </span>
@@ -192,7 +282,12 @@ const Quran = () => {
                                         <p style={{ fontSize: '2.2rem', textAlign: 'right', direction: 'rtl', marginBottom: '20px', lineHeight: '2', fontFamily: 'Amiri' }}>
                                             {renderTajwid(a.tajwidText || a.text)} <span style={{ color: 'var(--secondary-light)', fontSize: '1.2rem', marginRight: '10px' }}>﴿{a.number}﴾</span>
                                         </p>
-                                        <p style={{ color: 'var(--text-muted)', fontSize: '1.2rem', fontStyle: 'italic' }}>{a.translation}</p>
+                                        <p style={{ color: 'var(--text-light)', fontSize: '1.2rem', marginBottom: '10px' }}>
+                                            {language === 'en' ? a.translation : a.amharicTranslation}
+                                        </p>
+                                        <button className="btn btn-outline" style={{ fontSize: '0.7rem', padding: '5px 10px' }} onClick={() => handleAyahClick(a)}>
+                                            VIEW TAFSIR
+                                        </button>
                                     </div>
                                 ))}
                             </div>
