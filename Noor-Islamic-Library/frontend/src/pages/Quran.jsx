@@ -12,6 +12,11 @@ const Quran = () => {
     const [showIndex, setShowIndex] = useState(false);
     const [language, setLanguage] = useState('am'); // 'en' or 'am'
     const [selectedAyahForTafsir, setSelectedAyahForTafsir] = useState(null);
+    const [imageLoading, setImageLoading] = useState(true);
+
+    useEffect(() => {
+        setImageLoading(true);
+    }, [currentPage]);
 
     useEffect(() => {
         const fetchSurahs = async () => {
@@ -221,51 +226,79 @@ const Quran = () => {
 
             <div style={{ width: '100%', maxWidth: '1100px', margin: '0 auto' }}>
                 {viewMode === 'page' ? (
-                    <div className="mushaf-container">
-                        <div className="mushaf-page">
-                            {pageAyahs.reduce((acc, a, index) => {
-                                const prev = pageAyahs[index - 1];
-                                const showHeader = !prev || prev.surahNumber !== a.surahNumber;
+                    <div className="mushaf-container-view" style={{ height: 'calc(100vh - 160px)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                        {(isLoading || imageLoading) && (
+                            <div className="loading-spinner" style={{ position: 'absolute', zIndex: 10 }}>
+                                <div className="spinner"></div>
+                            </div>
+                        )}
 
-                                if (showHeader) {
-                                    acc.push(
-                                        <div key={`header-${a.surahNumber}`} className="surah-header-mushaf">
-                                            {a.surahNameArabic}
-                                        </div>
-                                    );
-                                    if (a.surahNumber !== 1 && a.surahNumber !== 9 && a.number === 1) {
-                                        acc.push(
-                                            <div key={`basmalah-${a.surahNumber}`} className="basmalah">
-                                                بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
-                                            </div>
-                                        );
-                                    }
-                                }
+                        <div style={{
+                            position: 'relative',
+                            height: '100%',
+                            width: '100%',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            // Add paper-like background for the page itself
+                            background: '#fffbf2',
+                            borderRadius: '15px',
+                            boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+                            overflow: 'hidden',
+                            padding: '10px'
+                        }}>
+                            <img
+                                src={`https://raw.githubusercontent.com/GovarJabbar/Quran-PNG/master/${String(currentPage).padStart(3, '0')}.png`}
+                                alt={`Page ${currentPage}`}
+                                style={{
+                                    maxHeight: '100%',
+                                    maxWidth: '100%',
+                                    objectFit: 'contain',
+                                    opacity: imageLoading ? 0 : 1,
+                                    transition: 'opacity 0.3s ease',
+                                    // Multiply blends the text nicely with the cream background
+                                    filter: 'multiply contrast(1.1)'
+                                }}
+                                onLoad={() => setImageLoading(false)}
+                                onError={(e) => {
+                                    setImageLoading(false);
+                                    e.target.style.display = 'none';
+                                    e.target.parentElement.innerHTML += '<div style="color:red; text-align:center; padding: 20px;">Failed to load image.<br/>Check internet connection.</div>';
+                                }}
+                            />
 
-                                acc.push(
-                                    <span key={`${a.surahNumber}-${a.number}`} className="ayah-wrapper" onClick={() => handleAyahClick(a)} style={{ cursor: 'pointer' }}>
-                                        {renderTajwid(a.tajwidText || a.text)}
-                                        <span className="ayah-end">{a.number}</span>
-                                    </span>
-                                );
-                                return acc;
-                            }, [])}
+                            {/* Hidden preloader for next page */}
+                            <img
+                                src={`https://raw.githubusercontent.com/GovarJabbar/Quran-PNG/master/${String(currentPage + 1).padStart(3, '0')}.png`}
+                                style={{ display: 'none' }}
+                                alt="preload"
+                            />
                         </div>
-                        <div className="mushaf-controls">
-                            <button
-                                className="btn btn-outline"
-                                disabled={currentPage === 1}
-                                onClick={() => setCurrentPage(prev => prev - 1)}
-                            >
-                                ← Previous
-                            </button>
-                            <div className="page-indicator">Page {currentPage} / 604</div>
+
+                        <div className="mushaf-controls" style={{ marginTop: '15px', display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center', width: '100%' }}>
                             <button
                                 className="btn btn-outline"
                                 disabled={currentPage === 604}
-                                onClick={() => setCurrentPage(prev => prev + 1)}
+                                onClick={() => {
+                                    setCurrentPage(prev => Math.min(prev + 1, 604));
+                                }}
+                                style={{ flex: '1 1 auto', minWidth: '120px' }}
                             >
-                                Next →
+                                ← Next Page
+                            </button>
+
+                            <div className="page-indicator" style={{ color: 'var(--text-light)', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+                                Page {currentPage} / 604
+                            </div>
+
+                            <button
+                                className="btn btn-outline"
+                                disabled={currentPage === 1}
+                                onClick={() => {
+                                    setCurrentPage(prev => Math.max(prev - 1, 1));
+                                }}
+                                style={{ flex: '1 1 auto', minWidth: '120px' }}
+                            >
+                                Previous Page →
                             </button>
                         </div>
                     </div>
