@@ -14,7 +14,19 @@ const quranSchema = new Schema({
         tafsir: {
             ibnKathir: { type: String },
             ibnKathirArabic: { type: String },
-            muyassar: { type: String }
+            ibnKathirAmharic: { type: String },
+            muyassar: { type: String },
+            muyassarAmharic: { type: String },
+            tabari: { type: String },
+            tabariAmharic: { type: String },
+            qurtubi: { type: String },
+            qurtubiAmharic: { type: String },
+            sadi: { type: String },
+            sadiAmharic: { type: String },
+            baghawi: { type: String },
+            baghawiAmharic: { type: String },
+            wasit: { type: String },
+            wasitAmharic: { type: String }
         },
         page: { type: Number },
         juz: { type: Number }

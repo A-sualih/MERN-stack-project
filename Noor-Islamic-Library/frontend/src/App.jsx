@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Auth from './pages/Auth';
 import Quran from './pages/Quran';
 import Hadith from './pages/Hadith';
+import Tafsir from './pages/Tafsir';
 import Books from './pages/Books';
 import Library from './pages/Library';
 import MainNavigation from './components/Navigation/MainNavigation';
@@ -47,6 +48,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/quran" element={<Quran />} />
         <Route path="/hadith" element={<Hadith />} />
+        <Route path="/tafsir" element={<Tafsir />} />
         <Route path="/books" element={<Books />} />
         <Route path="/library/:category" element={<Library />} />
         <Route path="*" element={<Navigate to="/" />} />
@@ -59,6 +61,7 @@ const App = () => {
         <Route path="/auth" element={<Auth />} />
         <Route path="/quran" element={<Quran />} />
         <Route path="/hadith" element={<Hadith />} />
+        <Route path="/tafsir" element={<Tafsir />} />
         <Route path="/books" element={<Books />} />
         <Route path="/library/:category" element={<Library />} />
         <Route path="*" element={<Navigate to="/auth" />} />

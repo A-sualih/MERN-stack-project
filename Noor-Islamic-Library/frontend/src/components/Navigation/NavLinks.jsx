@@ -17,7 +17,7 @@ const NavLinks = () => {
                 <NavLink to="/hadith">Hadith</NavLink>
             </li>
             <li>
-                <NavLink to="/library/Tafsir">Tafsir</NavLink>
+                <NavLink to="/tafsir">Tafsir</NavLink>
             </li>
             <li>
                 <NavLink to="/library/Fiqh">Fiqh</NavLink>

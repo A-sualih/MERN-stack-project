@@ -39,7 +39,8 @@ const seedData = async () => {
             // Helper to find key
             const findKey = (search) => editionKeys.find(k => k === search) || editionKeys.find(k => k.includes(search));
 
-            const arabicKey = findKey('ara_quran_simple') || findKey('ara_quran') || 'ara_quran_simple';
+            // Use actual Arabic text, not transliteration
+            const arabicKey = findKey('ara-quranuthmanihafss') || findKey('ara-quranindopak') || findKey('ara_quran') || 'ara-quranuthmanihafss';
             // "Sahih International" is often spelled "saheeh" in this API keys
             const englishKey = findKey('eng_saheeh') || findKey('eng_sahih') || editionKeys.find(k => k.startsWith('eng_'));
             const amharicKey = findKey('amh_muhammedsadiqan') || findKey('amh_muhammedsadiqan_la') || editionKeys.find(k => k.startsWith('amh_'));

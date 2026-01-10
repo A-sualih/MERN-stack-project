@@ -13,6 +13,8 @@ const Quran = () => {
     const [language, setLanguage] = useState('am'); // 'en' or 'am'
     const [selectedAyahForTafsir, setSelectedAyahForTafsir] = useState(null);
     const [imageLoading, setImageLoading] = useState(true);
+    const [selectedTafsir, setSelectedTafsir] = useState('muyassar'); // Default Tafsir
+    const [tafsirLanguage, setTafsirLanguage] = useState('ar'); // 'ar' or 'am' for Tafsir
 
     useEffect(() => {
         setImageLoading(true);
@@ -91,18 +93,38 @@ const Quran = () => {
         setSelectedAyahForTafsir(a);
     };
 
+    // Tafsir data structure
+    const tafsirSources = [
+        { id: 'muyassar', name: 'Al-Muyassar', arabicName: 'الميسر', field: 'muyassar', amharicField: 'muyassarAmharic' },
+        { id: 'ibnKathir', name: 'Ibn Kathir', arabicName: 'ابن كثير', field: 'ibnKathirArabic', amharicField: 'ibnKathirAmharic' },
+        { id: 'tabari', name: 'Al-Tabari', arabicName: 'الطبري', field: 'tabari', amharicField: 'tabariAmharic' },
+        { id: 'qurtubi', name: 'Al-Qurtubi', arabicName: 'القرطبي', field: 'qurtubi', amharicField: 'qurtubiAmharic' },
+        { id: 'sadi', name: 'Al-Sa\'di', arabicName: 'السعدي', field: 'sadi', amharicField: 'sadiAmharic' },
+        { id: 'baghawi', name: 'Al-Baghawi', arabicName: 'البغوي', field: 'baghawi', amharicField: 'baghawiAmharic' },
+        { id: 'wasit', name: 'Al-Wasit', arabicName: 'الوسيط', field: 'wasit', amharicField: 'wasitAmharic' }
+    ];
+
+    const getCurrentTafsir = () => {
+        const source = tafsirSources.find(t => t.id === selectedTafsir);
+        if (!source || !selectedAyahForTafsir?.tafsir) return '';
+
+        const fieldToUse = tafsirLanguage === 'ar' ? source.field : source.amharicField;
+        return selectedAyahForTafsir.tafsir[fieldToUse] || '';
+    };
+
     return (
         <div className="container">
             {/* Tafsir Modal */}
             <div className={`modal-overlay ${selectedAyahForTafsir ? 'active' : ''}`} onClick={() => setSelectedAyahForTafsir(null)}>
-                <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '700px' }}>
+                <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '900px', maxHeight: '90vh' }}>
                     <div className="modal-header">
                         <h2 style={{ color: 'var(--primary-light)' }}>
-                            Ayah {selectedAyahForTafsir?.number} Tafsir
+                            Ayah {selectedAyahForTafsir?.number} - Tafsir
                         </h2>
                         <button className="close-btn" onClick={() => setSelectedAyahForTafsir(null)}>&times;</button>
                     </div>
-                    <div style={{ overflowY: 'auto', padding: '10px' }}>
+                    <div style={{ overflowY: 'auto', padding: '20px' }}>
+                        {/* Arabic Text */}
                         <p style={{
                             fontSize: '2rem',
                             textAlign: 'right',
@@ -117,58 +139,133 @@ const Quran = () => {
                         }}>
                             {selectedAyahForTafsir && renderTajwid(selectedAyahForTafsir.tajwidText || selectedAyahForTafsir.text)}
                         </p>
-                        <h4 style={{ color: 'var(--secondary-light)', marginBottom: '10px' }}>Translation ({language === 'en' ? 'English' : 'Amharic'})</h4>
-                        <p style={{ color: 'var(--text-light)', marginBottom: '25px', lineHeight: '1.6', fontSize: '1.1rem' }}>
-                            {language === 'en' ? selectedAyahForTafsir?.translation : selectedAyahForTafsir?.amharicTranslation}
-                        </p>
 
-                        <div style={{ padding: '20px', background: 'rgba(255,255,255,0.02)', borderRadius: '15px', border: '1px solid rgba(255,255,255,0.05)', marginBottom: '20px' }}>
-                            <h4 style={{ color: 'var(--secondary-light)', marginBottom: '15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span>Arabic Tafsir (Vocalized)</span>
-                                <span style={{ fontFamily: 'Amiri', fontSize: '1.4rem' }}>تفسير الميسر - بالتشكيل</span>
+                        {/* Translation */}
+                        <div style={{ marginBottom: '30px' }}>
+                            <h4 style={{ color: 'var(--secondary-light)', marginBottom: '10px' }}>
+                                Translation ({language === 'en' ? 'English' : 'Amharic'})
                             </h4>
-                            <div
-                                style={{
-                                    color: 'var(--text-light)',
-                                    lineHeight: '2.4',
-                                    fontSize: '1.6rem',
-                                    textAlign: 'right',
-                                    direction: 'rtl',
-                                    fontFamily: 'Amiri',
-                                    padding: '10px'
-                                }}
-                                dangerouslySetInnerHTML={{ __html: selectedAyahForTafsir?.tafsir?.muyassar || selectedAyahForTafsir?.tafsir?.ibnKathirArabic }}
-                            />
+                            <p style={{ color: 'var(--text-light)', lineHeight: '1.8', fontSize: '1.1rem' }}>
+                                {language === 'en' ? selectedAyahForTafsir?.translation : selectedAyahForTafsir?.amharicTranslation}
+                            </p>
                         </div>
 
-                        <div style={{ padding: '20px', background: 'rgba(255,255,255,0.01)', borderRadius: '15px', border: '1px solid rgba(255,255,255,0.03)' }}>
-                            <h4 style={{ color: 'var(--secondary-light)', marginBottom: '15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span>Ibn Kathir (Classical)</span>
-                                <span style={{ fontFamily: 'Amiri', fontSize: '1.4rem' }}>تفسير ابن كثير</span>
-                            </h4>
-                            <div
-                                style={{
-                                    color: 'var(--text-muted)',
-                                    lineHeight: '2',
-                                    fontSize: '1.4rem',
-                                    textAlign: 'right',
-                                    direction: 'rtl',
-                                    fontFamily: 'Amiri',
-                                    padding: '10px'
-                                }}
-                                dangerouslySetInnerHTML={{ __html: selectedAyahForTafsir?.tafsir?.ibnKathirArabic }}
-                            />
-                        </div>
-
-                        {selectedAyahForTafsir?.tafsir?.ibnKathirArabic && (
-                            <div style={{ marginTop: '30px', opacity: 0.6 }}>
-                                <h4 style={{ color: 'var(--secondary-light)', marginBottom: '10px', fontSize: '0.9rem' }}>English Tafsir (Abridged)</h4>
-                                <div
-                                    style={{ color: 'var(--text-muted)', lineHeight: '1.6', fontSize: '0.9rem' }}
-                                    dangerouslySetInnerHTML={{ __html: selectedAyahForTafsir?.tafsir?.ibnKathir }}
-                                />
+                        {/* Tafsir Section */}
+                        <div style={{ marginTop: '30px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
+                                <h3 style={{ color: 'var(--primary-light)', margin: 0 }}>Tafsir (Commentary)</h3>
+                                <button
+                                    className="btn btn-outline"
+                                    onClick={() => setTafsirLanguage(prev => prev === 'ar' ? 'am' : 'ar')}
+                                    style={{ fontSize: '0.8rem', padding: '6px 12px' }}
+                                >
+                                    {tafsirLanguage === 'ar' ? '🇸🇦 Arabic' : '🇪🇹 Amharic'}
+                                </button>
                             </div>
-                        )}
+
+                            {/* Tafsir Tabs */}
+                            <div style={{
+                                display: 'flex',
+                                gap: '8px',
+                                marginBottom: '20px',
+                                overflowX: 'auto',
+                                paddingBottom: '10px',
+                                borderBottom: '2px solid rgba(255,255,255,0.1)'
+                            }}>
+                                {tafsirSources.map(source => (
+                                    <button
+                                        key={source.id}
+                                        onClick={() => setSelectedTafsir(source.id)}
+                                        style={{
+                                            padding: '10px 16px',
+                                            borderRadius: '8px',
+                                            border: 'none',
+                                            background: selectedTafsir === source.id
+                                                ? 'linear-gradient(135deg, var(--primary-light), var(--secondary-light))'
+                                                : 'rgba(255,255,255,0.05)',
+                                            color: selectedTafsir === source.id ? '#fff' : 'var(--text-light)',
+                                            cursor: 'pointer',
+                                            fontSize: '0.9rem',
+                                            fontWeight: selectedTafsir === source.id ? '600' : '400',
+                                            whiteSpace: 'nowrap',
+                                            transition: 'all 0.3s ease',
+                                            boxShadow: selectedTafsir === source.id ? '0 4px 12px rgba(0,0,0,0.2)' : 'none'
+                                        }}
+                                    >
+                                        {source.name}
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Tafsir Content */}
+                            <div style={{
+                                padding: '25px',
+                                background: 'rgba(255,255,255,0.02)',
+                                borderRadius: '15px',
+                                border: '1px solid rgba(255,255,255,0.05)',
+                                minHeight: '200px'
+                            }}>
+                                <div style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    marginBottom: '15px'
+                                }}>
+                                    <h4 style={{ color: 'var(--secondary-light)', margin: 0 }}>
+                                        {tafsirSources.find(t => t.id === selectedTafsir)?.name}
+                                    </h4>
+                                    <span style={{ fontFamily: 'Amiri', fontSize: '1.3rem', color: 'var(--primary-light)' }}>
+                                        {tafsirSources.find(t => t.id === selectedTafsir)?.arabicName}
+                                    </span>
+                                </div>
+
+                                {getCurrentTafsir() ? (
+                                    <div
+                                        style={{
+                                            color: 'var(--text-light)',
+                                            lineHeight: tafsirLanguage === 'ar' ? '2.2' : '1.8',
+                                            fontSize: tafsirLanguage === 'ar' ? '1.4rem' : '1.1rem',
+                                            textAlign: tafsirLanguage === 'ar' ? 'right' : 'left',
+                                            direction: tafsirLanguage === 'ar' ? 'rtl' : 'ltr',
+                                            fontFamily: tafsirLanguage === 'ar' ? 'Amiri' : 'inherit',
+                                            padding: '10px'
+                                        }}
+                                        dangerouslySetInnerHTML={{ __html: getCurrentTafsir() }}
+                                    />
+                                ) : (
+                                    <p style={{
+                                        color: 'var(--text-muted)',
+                                        fontStyle: 'italic',
+                                        textAlign: 'center',
+                                        padding: '40px 20px'
+                                    }}>
+                                        {tafsirLanguage === 'am'
+                                            ? 'Amharic translation not available for this Tafsir yet.'
+                                            : 'Tafsir not available for this ayah.'}
+                                    </p>
+                                )}
+                            </div>
+
+                            {/* English Ibn Kathir (Abridged) - if available */}
+                            {selectedAyahForTafsir?.tafsir?.ibnKathir && selectedTafsir === 'ibnKathir' && (
+                                <div style={{ marginTop: '20px', opacity: 0.7 }}>
+                                    <h4 style={{ color: 'var(--secondary-light)', marginBottom: '10px', fontSize: '0.9rem' }}>
+                                        English Translation (Abridged)
+                                    </h4>
+                                    <div
+                                        style={{
+                                            color: 'var(--text-muted)',
+                                            lineHeight: '1.6',
+                                            fontSize: '0.95rem',
+                                            padding: '15px',
+                                            background: 'rgba(255,255,255,0.01)',
+                                            borderRadius: '10px'
+                                        }}
+                                        dangerouslySetInnerHTML={{ __html: selectedAyahForTafsir.tafsir.ibnKathir }}
+                                    />
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
