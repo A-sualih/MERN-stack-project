@@ -43,20 +43,6 @@ const NewPlace = () => {
       formData.append("creator", auth.userId);
       formData.append("image", formState.inputs.image.value);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    await sendRequest(
-       process.env.REACT_APP_BACKEND_URL+"/places",
-=======
-    await sendRequest(process.env.REACT_APP_BACKEND_URL + "/places",
->>>>>>> 982d02b190fb7804b5f5a1ec5134ecf1fe0037da
-      "POST",
-      formData,
-      {
-        Authorization: "Bearer " + auth.token // ✅ if auth enabled
-      }
-    );
-=======
       await sendRequest(import.meta.env.VITE_BACKEND_URL + "/places",
         "POST",
         formData,
@@ -64,7 +50,6 @@ const NewPlace = () => {
           Authorization: "Bearer " + auth.token // ✅ if auth enabled
         }
       );
->>>>>>> 55dc9d8a0a31d4443dfcaf7321c1a26b66355ba9
 
       navigate("/");
     } catch (err) { }
