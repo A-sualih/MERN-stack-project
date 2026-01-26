@@ -78,7 +78,7 @@ async function fetchTafsirsForVerse(surahNumber, ayahNumber) {
     }
 }
 
-async function populateTafsirForSurah(surahNumber) {
+async function populateTafsirForSurah(surahNumber, skipTranslation = false) {
     console.log(`\n📖 Processing Surah ${surahNumber}...`);
 
     const surah = await Quran.findOne({ surahNumber });
@@ -110,35 +110,39 @@ async function populateTafsirForSurah(surahNumber) {
         }
 
         // Translate to Amharic
-        console.log(`      Translating to Amharic...`);
+        if (!skipTranslation) {
+            console.log(`      Translating to Amharic...`);
 
-        if (arabicTafsirs.ibnKathirArabic) {
-            finalData.ibnKathirAmharic = await translateToAmharic(arabicTafsirs.ibnKathirArabic);
-            await delay(200);
-        }
-        if (arabicTafsirs.muyassar) {
-            finalData.muyassarAmharic = await translateToAmharic(arabicTafsirs.muyassar);
-            await delay(200);
-        }
-        if (arabicTafsirs.tabari) {
-            finalData.tabariAmharic = await translateToAmharic(arabicTafsirs.tabari);
-            await delay(200);
-        }
-        if (arabicTafsirs.qurtubi) {
-            finalData.qurtubiAmharic = await translateToAmharic(arabicTafsirs.qurtubi);
-            await delay(200);
-        }
-        if (arabicTafsirs.sadi) {
-            finalData.sadiAmharic = await translateToAmharic(arabicTafsirs.sadi);
-            await delay(200);
-        }
-        if (arabicTafsirs.baghawi) {
-            finalData.baghawiAmharic = await translateToAmharic(arabicTafsirs.baghawi);
-            await delay(200);
-        }
-        if (arabicTafsirs.wasit) {
-            finalData.wasitAmharic = await translateToAmharic(arabicTafsirs.wasit);
-            await delay(200);
+            if (arabicTafsirs.ibnKathirArabic) {
+                finalData.ibnKathirAmharic = await translateToAmharic(arabicTafsirs.ibnKathirArabic);
+                await delay(200);
+            }
+            if (arabicTafsirs.muyassar) {
+                finalData.muyassarAmharic = await translateToAmharic(arabicTafsirs.muyassar);
+                await delay(200);
+            }
+            if (arabicTafsirs.tabari) {
+                finalData.tabariAmharic = await translateToAmharic(arabicTafsirs.tabari);
+                await delay(200);
+            }
+            if (arabicTafsirs.qurtubi) {
+                finalData.qurtubiAmharic = await translateToAmharic(arabicTafsirs.qurtubi);
+                await delay(200);
+            }
+            if (arabicTafsirs.sadi) {
+                finalData.sadiAmharic = await translateToAmharic(arabicTafsirs.sadi);
+                await delay(200);
+            }
+            if (arabicTafsirs.baghawi) {
+                finalData.baghawiAmharic = await translateToAmharic(arabicTafsirs.baghawi);
+                await delay(200);
+            }
+            if (arabicTafsirs.wasit) {
+                finalData.wasitAmharic = await translateToAmharic(arabicTafsirs.wasit);
+                await delay(200);
+            }
+        } else {
+            console.log(`      ⏩ Skipping translation (Arabic only update)`);
         }
 
         // Update database
@@ -160,19 +164,20 @@ async function main() {
 
     const args = process.argv.slice(2);
     const surahArg = args.find(a => a.startsWith('--surah='));
+    const skipTranslation = args.includes('--skip-translation');
 
     if (surahArg) {
         const surahNum = parseInt(surahArg.split('=')[1]);
-        await populateTafsirForSurah(surahNum);
+        await populateTafsirForSurah(surahNum, skipTranslation);
     } else if (args.includes('--all')) {
         for (let i = 1; i <= 114; i++) {
-            await populateTafsirForSurah(i);
+            await populateTafsirForSurah(i, skipTranslation);
             await delay(2000);
         }
     } else {
         console.log('Usage:');
-        console.log('  node populate-arabic-tafsir-fixed.js --surah=1');
-        console.log('  node populate-arabic-tafsir-fixed.js --all');
+        console.log('  node populate-arabic-tafsir-fixed.js --surah=1 [--skip-translation]');
+        console.log('  node populate-arabic-tafsir-fixed.js --all [--skip-translation]');
     }
 
     console.log('\n✨ Done!');

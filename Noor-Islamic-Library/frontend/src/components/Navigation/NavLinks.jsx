@@ -41,6 +41,11 @@ const NavLinks = () => {
                     <button className="btn btn-outline" onClick={auth.logout}>LOGOUT</button>
                 </li>
             )}
+            {auth.isLoggedIn && auth.role === 'admin' && (
+                <li>
+                    <NavLink to="/admin" className="btn btn-primary">ADMIN</NavLink>
+                </li>
+            )}
         </ul>
     );
 };

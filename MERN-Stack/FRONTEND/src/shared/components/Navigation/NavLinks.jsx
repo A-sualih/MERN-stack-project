@@ -16,6 +16,9 @@ const NavLinks = () => {
         {auth.isLoggedIn && <li>
           <NavLink to='/places/new'> ADD PLACE</NavLink>
         </li>}
+        {auth.isLoggedIn && auth.isAdmin && <li>
+          <NavLink to='/admin'> ADMIN</NavLink>
+        </li>}
         {!auth.isLoggedIn && <li>
           <NavLink to='/auth'> AUTHENTICATE</NavLink>
         </li>}

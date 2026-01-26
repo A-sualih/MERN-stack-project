@@ -10,6 +10,7 @@ const booksRoutes = require('./routes/books-routes');
 const notesRoutes = require('./routes/notes-routes');
 const bookmarksRoutes = require('./routes/bookmarks-routes');
 const libraryRoutes = require('./routes/library-routes');
+const adminRoutes = require('./routes/admin-routes');
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use('/api/books', booksRoutes);
 app.use('/api/notes', notesRoutes);
 app.use('/api/bookmarks', bookmarksRoutes);
 app.use('/api/library', libraryRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.get('/', (req, res) => {
     res.json({ message: 'Welcome to Noor Islamic Library API' });

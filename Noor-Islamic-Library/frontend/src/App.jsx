@@ -8,6 +8,7 @@ import Hadith from './pages/Hadith';
 import Tafsir from './pages/Tafsir';
 import Books from './pages/Books';
 import Library from './pages/Library';
+import AdminDashboard from './pages/AdminDashboard';
 import MainNavigation from './components/Navigation/MainNavigation';
 import { AuthContext } from './context/auth-context';
 
@@ -51,6 +52,7 @@ const App = () => {
         <Route path="/tafsir" element={<Tafsir />} />
         <Route path="/books" element={<Books />} />
         <Route path="/library/:category" element={<Library />} />
+        <Route path="/admin" element={<AdminDashboard />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     );
@@ -59,11 +61,6 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/auth" element={<Auth />} />
-        <Route path="/quran" element={<Quran />} />
-        <Route path="/hadith" element={<Hadith />} />
-        <Route path="/tafsir" element={<Tafsir />} />
-        <Route path="/books" element={<Books />} />
-        <Route path="/library/:category" element={<Library />} />
         <Route path="*" element={<Navigate to="/auth" />} />
       </Routes>
     );
