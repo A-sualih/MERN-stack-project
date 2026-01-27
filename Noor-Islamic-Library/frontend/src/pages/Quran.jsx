@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useHttpClient } from '../hooks/http-hook';
 import { getFromCache, saveToCache } from '../util/indexeddb';
+import './Quran.css';
 
 const Quran = () => {
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -292,31 +293,32 @@ const Quran = () => {
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', flexWrap: 'wrap', gap: '20px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-                    <h1 style={{ color: 'var(--primary-light)', margin: 0 }}>The Holy Qur'an</h1>
-                    <button className="btn btn-outline" onClick={toggleIndex} style={{ padding: '8px 20px', borderRadius: '12px' }}>
+                <div>
+                    <h1 style={{ color: 'var(--primary-light)', margin: 0, fontSize: '2.5rem' }}>📖 Qur'an Reading</h1>
+                    <button className="btn btn-outline" onClick={toggleIndex} style={{ marginTop: '10px', borderColor: 'var(--primary-light)' }}>
                         📖 SURAH INDEX
                     </button>
-                    <button className="btn btn-primary" onClick={toggleLanguage} style={{ padding: '8px 20px', borderRadius: '12px', fontSize: '0.8rem' }}>
-                        {language === 'en' ? 'ENGLISH ⇄ AMHARIC' : 'AMHARIC ⇄ ENGLISH'}
-                    </button>
                 </div>
-                <div className="glass" style={{ padding: '5px', borderRadius: '12px' }}>
+
+                <div className="glass" style={{ padding: '5px', borderRadius: '12px', border: '1px solid var(--primary-light)' }}>
                     <button
                         className={`btn ${viewMode === 'page' ? 'btn-primary' : ''}`}
                         onClick={() => setViewMode('page')}
-                        style={{ padding: '5px 15px', fontSize: '0.8rem' }}
                     >
-                        MUSHAF VIEW
+                        MUSHAF
                     </button>
                     <button
                         className={`btn ${viewMode === 'surah' ? 'btn-primary' : ''}`}
                         onClick={() => setViewMode('surah')}
-                        style={{ padding: '5px 15px', fontSize: '0.8rem', marginLeft: '5px' }}
+                        style={{ marginLeft: '5px' }}
                     >
-                        SURAH VIEW
+                        LIST VIEW
                     </button>
                 </div>
+
+                <button className="btn btn-primary" onClick={toggleLanguage} style={{ padding: '12px 24px', borderRadius: '12px' }}>
+                    {language === 'en' ? 'ENGLISH ⇄ AMHARIC' : 'AMHARIC ⇄ ENGLISH'}
+                </button>
             </div>
 
             {error && <p style={{ color: 'red' }}>{error}</p>}

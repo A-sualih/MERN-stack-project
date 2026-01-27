@@ -36,6 +36,7 @@ const Auth = () => {
                     }),
                     { 'Content-Type': 'application/json' }
                 );
+                console.log('[Auth] Login successful, role:', responseData.role);
                 auth.login(responseData.userId, responseData.token, responseData.role);
             } catch (err) { }
         } else {
@@ -56,8 +57,14 @@ const Auth = () => {
     };
 
     return (
-        <div className="container" style={{ maxWidth: '500px' }}>
-            <div className="card glass">
+        <div className="container" style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: 'calc(100vh - 150px)',
+            padding: '20px'
+        }}>
+            <div className="card glass auth-card" style={{ width: '100%', maxWidth: '450px' }}>
                 <h2 style={{ textAlign: 'center', marginBottom: '30px' }}>{isLoginMode ? 'Login' : 'Create Account'}</h2>
                 {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
                 <form onSubmit={authSubmitHandler}>

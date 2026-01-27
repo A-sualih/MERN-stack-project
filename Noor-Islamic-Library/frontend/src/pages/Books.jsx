@@ -16,9 +16,15 @@ const Books = () => {
 
     const fetchBooks = async () => {
         try {
+            console.log('[Books] Fetching books...');
             const responseData = await sendRequest('http://localhost:5000/api/books');
+            console.log('[Books] Fetch success:', responseData.books.length, 'books found');
             setBooks(responseData.books);
-        } catch (err) { }
+        } catch (err) {
+            if (err.name !== 'AbortError') {
+                console.error('[Books] Fetch failed:', err);
+            }
+        }
     };
 
     useEffect(() => {
@@ -34,6 +40,7 @@ const Books = () => {
         formData.append('pdf', file);
 
         try {
+            console.log('[Books] Submitting book with token:', auth.token ? auth.token.substring(0, 10) + '...' : 'NONE');
             await sendRequest(
                 'http://localhost:5000/api/books',
                 'POST',
@@ -42,7 +49,15 @@ const Books = () => {
             );
             setShowUpload(false);
             fetchBooks();
-        } catch (err) { }
+        } catch (err) {
+            if (err.name !== 'AbortError') {
+                console.error('[Books] Submit failed:', err.message);
+                if (err.message.toLowerCase().includes('expired')) {
+                    alert('Session expired. Please log out and log in again.');
+                    auth.logout();
+                }
+            }
+        }
     };
 
     return (

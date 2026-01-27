@@ -1,7 +1,8 @@
+require('dotenv').config();
+const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config();
 
 const usersRoutes = require('./routes/users-routes');
 const quranRoutes = require('./routes/quran-routes');
@@ -11,12 +12,21 @@ const notesRoutes = require('./routes/notes-routes');
 const bookmarksRoutes = require('./routes/bookmarks-routes');
 const libraryRoutes = require('./routes/library-routes');
 const adminRoutes = require('./routes/admin-routes');
+const categoryRoutes = require('./routes/category-routes');
 
 const app = express();
+
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+app.use((req, res, next) => {
+    console.log(`[Request] ${req.method} ${req.url}`);
+    next();
+});
 
 // Routes
 app.use('/api/users', usersRoutes);
@@ -27,8 +37,10 @@ app.use('/api/notes', notesRoutes);
 app.use('/api/bookmarks', bookmarksRoutes);
 app.use('/api/library', libraryRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/categories', categoryRoutes);
 
 app.get('/', (req, res) => {
+
     res.json({ message: 'Welcome to Noor Islamic Library API' });
 });
 

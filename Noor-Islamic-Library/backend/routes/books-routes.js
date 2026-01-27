@@ -10,7 +10,27 @@ router.get('/:bid', booksController.getBookById);
 
 router.use(checkAuth); // Protect following routes
 
-router.post('/', fileUpload.single('pdf'), booksController.addBook);
+router.post(
+    '/',
+    fileUpload.fields([
+        { name: 'pdf', maxCount: 1 },
+        { name: 'epub', maxCount: 1 },
+        { name: 'image', maxCount: 1 }
+    ]),
+    booksController.addBook
+);
+
+router.patch(
+    '/:bid',
+    fileUpload.fields([
+        { name: 'pdf', maxCount: 1 },
+        { name: 'epub', maxCount: 1 },
+        { name: 'image', maxCount: 1 }
+    ]),
+    booksController.updateBook
+);
+
 router.delete('/:bid', booksController.deleteBook);
 
 module.exports = router;
+

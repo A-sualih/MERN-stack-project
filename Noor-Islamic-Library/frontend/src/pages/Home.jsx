@@ -5,15 +5,15 @@ const Home = () => {
     return (
         <div className="container">
             <header style={{ textAlign: 'center', marginBottom: '60px' }}>
-                <h1 style={{ fontSize: '3.5rem', marginBottom: '20px', background: 'linear-gradient(135deg, #10b981, #f59e0b)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                <h1 className="hero-title">
                     Noor Islamic Library
                 </h1>
-                <p style={{ fontSize: '1.2rem', color: 'var(--text-muted)', maxWidth: '700px', margin: '0 auto' }}>
+                <p className="hero-text">
                     Explore a vast collection of Islamic knowledge. Read the Qur'an, search the Hadith, and access authentic Islamic books, all in one place.
                 </p>
                 <div style={{ marginTop: '40px' }}>
-                    <Link to="/quran" className="btn btn-primary" style={{ marginRight: '15px' }}>Start Reading</Link>
-                    <Link to="/auth" className="btn btn-outline">Join Community</Link>
+                    <Link to="/quran" className="btn btn-primary" style={{ margin: '10px' }}>Start Reading</Link>
+                    <Link to="/auth" className="btn btn-outline" style={{ margin: '10px' }}>Join Community</Link>
                 </div>
             </header>
 

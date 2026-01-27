@@ -8,42 +8,40 @@ const NavLinks = () => {
     return (
         <ul className="nav-links">
             <li>
-                <NavLink to="/" end>Home</NavLink>
+                <NavLink to="/" end><span>🏠</span> Home</NavLink>
             </li>
             <li>
-                <NavLink to="/quran">Qur'an</NavLink>
+                <NavLink to="/quran"><span>📖</span> Qur'an</NavLink>
             </li>
             <li>
-                <NavLink to="/hadith">Hadith</NavLink>
+                <NavLink to="/hadith"><span>📜</span> Hadith</NavLink>
             </li>
             <li>
-                <NavLink to="/tafsir">Tafsir</NavLink>
+                <NavLink to="/tafsir"><span>🕌</span> Tafsir</NavLink>
             </li>
             <li>
-                <NavLink to="/library/Fiqh">Fiqh</NavLink>
+                <NavLink to="/library/Fiqh"><span>⚖️</span> Fiqh</NavLink>
             </li>
             <li>
-                <NavLink to="/library/Seerah">Seerah</NavLink>
+                <NavLink to="/library/Seerah"><span>🐎</span> Seerah</NavLink>
             </li>
             <li>
-                <NavLink to="/library/Duas">Duas</NavLink>
+                <NavLink to="/library/Duas"><span>🙏</span> Duas</NavLink>
             </li>
             <li>
-                <NavLink to="/books">Books</NavLink>
+                <NavLink to="/books"><span>📚</span> Books</NavLink>
             </li>
             {!auth.isLoggedIn && (
                 <li>
-                    <NavLink to="/auth">Authenticate</NavLink>
+                    <NavLink to="/auth" className="auth-btn"><span>🔑</span> Login</NavLink>
                 </li>
             )}
             {auth.isLoggedIn && (
-                <li>
-                    <button className="btn btn-outline" onClick={auth.logout}>LOGOUT</button>
-                </li>
-            )}
-            {auth.isLoggedIn && auth.role === 'admin' && (
-                <li>
-                    <NavLink to="/admin" className="btn btn-primary">ADMIN</NavLink>
+                <li className="nav-user-controls">
+                    {(auth.role === 'admin' || auth.role === 'content-admin') && (
+                        <NavLink to="/admin" className="admin-pill">⚡ Admin</NavLink>
+                    )}
+                    <button className="logout-pill" onClick={auth.logout}>Sign Out</button>
                 </li>
             )}
         </ul>

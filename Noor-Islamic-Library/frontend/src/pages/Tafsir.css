@@ -1,0 +1,342 @@
+/* ============================================
+   TAFSIR PAGE - PREMIUM SCHOLARLY STYLING
+   ============================================ */
+
+/* Tafsir Study Room Container */
+.tafsir-study-room {
+    position: relative;
+}
+
+.tafsir-study-room::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at top right, rgba(180, 83, 9, 0.05), transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Modal Overlay for Tafsir */
+.tafsir-study-room .modal-overlay {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+.tafsir-study-room .modal-content {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.tafsir-study-room .modal-header {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(180, 83, 9, 0.1));
+}
+
+.tafsir-study-room .modal-header h2 {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Tafsir Surah Grid */
+.tafsir-study-room .surah-grid-modal {
+    padding: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+}
+
+/* Tafsir Surah Cards */
+.tafsir-study-room .surah-card-small {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.8));
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    border-radius: 16px;
+    padding: 22px 26px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Scholarly decoration */
+.tafsir-study-room .surah-card-small::after {
+    content: '📜';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+    opacity: 0.1;
+    transition: all 0.3s ease;
+}
+
+.tafsir-study-room .surah-card-small:hover::after {
+    opacity: 0.3;
+    transform: scale(1.2) rotate(10deg);
+}
+
+.tafsir-study-room .surah-card-small::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.tafsir-study-room .surah-card-small:hover::before {
+    left: 100%;
+}
+
+.tafsir-study-room .surah-card-small:hover {
+    transform: translateY(-5px) scale(1.02);
+    border-color: rgba(245, 158, 11, 0.6);
+    box-shadow: 0 15px 35px rgba(245, 158, 11, 0.2),
+        0 0 20px rgba(245, 158, 11, 0.1);
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(180, 83, 9, 0.3));
+}
+
+/* Tafsir Number Badge */
+.tafsir-study-room .surah-card-small .num {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    transition: all 0.3s ease;
+}
+
+.tafsir-study-room .surah-card-small:hover .num {
+    transform: scale(1.1) rotate(-5deg);
+    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+}
+
+/* Tafsir Surah Name */
+.tafsir-study-room .surah-card-small>div:first-child span:not(.num) {
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: #f8fafc;
+    transition: color 0.3s ease;
+}
+
+.tafsir-study-room .surah-card-small:hover>div:first-child span:not(.num) {
+    color: #fbbf24;
+}
+
+/* Tafsir Arabic Name */
+.tafsir-study-room .surah-card-small>span:last-child {
+    font-family: 'Amiri', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: rgba(212, 175, 55, 0.9);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.tafsir-study-room .surah-card-small:hover>span:last-child {
+    color: #d4af37;
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+}
+
+/* Special Tafsir Card Borders */
+.tafsir-study-room .surah-card-small:nth-child(4n+1) {
+    border-left: 3px solid #f59e0b;
+}
+
+.tafsir-study-room .surah-card-small:nth-child(4n+2) {
+    border-left: 3px solid #fbbf24;
+}
+
+.tafsir-study-room .surah-card-small:nth-child(4n+3) {
+    border-left: 3px solid #d97706;
+}
+
+.tafsir-study-room .surah-card-small:nth-child(4n+4) {
+    border-left: 3px solid #b45309;
+}
+
+/* Tafsir List Container */
+.tafsir-list-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Full Width List for Tafsir */
+.tafsir-study-room .full-width-list {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* Enhanced Library Card for Tafsir */
+.tafsir-study-room .library-card {
+    border-left: 5px solid var(--secondary-light);
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.8));
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tafsir-study-room .library-card:hover {
+    border-left-color: #fbbf24;
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(245, 158, 11, 0.2);
+}
+
+/* Decorative Arabic Container for Tafsir */
+.tafsir-study-room .decorative-arabic-container {
+    background: radial-gradient(circle at center, #fffef5 0%, #fef3c7 100%);
+    border: 2px solid #fcd34d;
+    box-shadow: inset 0 0 30px rgba(245, 158, 11, 0.1);
+}
+
+.tafsir-study-room .decorative-arabic-container::before,
+.tafsir-study-room .decorative-arabic-container::after {
+    color: #f59e0b;
+}
+
+/* Explanation Box for Tafsir */
+.tafsir-study-room .explanation-box {
+    background: rgba(245, 158, 11, 0.05);
+    border-left: 3px solid var(--secondary-light);
+    padding: 25px;
+    border-radius: 12px;
+    position: relative;
+}
+
+.tafsir-study-room .explanation-box::before {
+    content: '📖';
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 1.5rem;
+    opacity: 0.1;
+}
+
+/* Explanation Label */
+.tafsir-study-room .explanation-label {
+    color: var(--secondary-light);
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tafsir-study-room .explanation-label::before {
+    content: '◆';
+    color: #fbbf24;
+}
+
+/* Explanation Text */
+.tafsir-study-room .explanation-text {
+    color: var(--text-main);
+    line-height: 1.8;
+    font-size: 1.1rem;
+}
+
+/* Scrollbar for Tafsir */
+.tafsir-study-room .surah-grid-modal::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+}
+
+.tafsir-study-room .surah-grid-modal::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+}
+
+/* Responsive Design for Tafsir */
+@media (max-width: 1200px) {
+    .tafsir-study-room .surah-grid-modal {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .tafsir-study-room .surah-grid-modal {
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 15px;
+        padding: 20px;
+    }
+
+    .tafsir-study-room .surah-card-small {
+        padding: 18px 20px;
+    }
+
+    .tafsir-study-room .surah-card-small .num {
+        width: 42px;
+        height: 42px;
+        font-size: 1rem;
+    }
+
+    .tafsir-study-room .surah-card-small>span:last-child {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .tafsir-study-room .surah-grid-modal {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 15px;
+    }
+}
+
+/* Parchment Effect for Ayah Display */
+.parchment-ayah {
+    background: radial-gradient(circle at center, #fffef5 0%, #fef3c7 100%);
+    padding: 35px;
+    border-radius: 20px;
+    border: 2px solid #fcd34d;
+    box-shadow: inset 0 0 40px rgba(245, 158, 11, 0.1),
+        0 10px 30px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.parchment-ayah::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+        repeating-linear-gradient(0deg,
+            transparent,
+            transparent 2px,
+            rgba(245, 158, 11, 0.03) 2px,
+            rgba(245, 158, 11, 0.03) 4px);
+    pointer-events: none;
+    border-radius: 20px;
+}
+
+/* Arabic Text Large */
+.arabic-text-large {
+    font-family: 'Amiri', serif;
+    font-size: 2.8rem;
+    line-height: 2.2;
+    color: #1a1a1a;
+    text-align: right;
+    direction: rtl;
+    margin: 0;
+    text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.5);
+    font-weight: 700;
+}
+
+/* Ayah Number Gold */
+.ayah-number-gold {
+    color: var(--secondary);
+    font-size: 1.5rem;
+    margin-right: 15px;
+    font-weight: bold;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
