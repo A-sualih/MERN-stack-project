@@ -25,10 +25,10 @@ const NavLinks = () => {
                         <NavLink to="/library/Fiqh"><span>⚖️</span> Fiqh</NavLink>
                     </li>
                     <li>
-                        <NavLink to="/library/Seerah"><span>🐎</span> Seerah</NavLink>
+                        <NavLink to="/library/Seerah"><span>🕋</span> Seerah</NavLink>
                     </li>
                     <li>
-                        <NavLink to="/library/Duas"><span>🙏</span> Duas</NavLink>
+                        <NavLink to="/library/Duas"><span>🤲</span> Duas</NavLink>
                     </li>
                     <li>
                         <NavLink to="/books"><span>📚</span> Books</NavLink>

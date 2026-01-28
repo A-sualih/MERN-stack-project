@@ -20,8 +20,8 @@ const Library = () => {
 
     const getIcon = () => {
         switch (category) {
-            case 'Duas': return '📿';
-            case 'Seerah': return '📜';
+            case 'Duas': return '🤲';
+            case 'Seerah': return '🕋';
             case 'Fiqh': return '⚖️';
             case 'Tafsir': return '📖';
             default: return '📚';

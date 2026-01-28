@@ -17,12 +17,19 @@ async function checkStatus() {
         totalAyahs: 0,
         tafsirCounts: {
             ibnKathirArabic: 0,
+            ibnKathirAmharic: 0,
             muyassar: 0,
+            muyassarAmharic: 0,
             tabari: 0,
+            tabariAmharic: 0,
             qurtubi: 0,
+            qurtubiAmharic: 0,
             sadi: 0,
+            sadiAmharic: 0,
             baghawi: 0,
-            wasit: 0
+            baghawiAmharic: 0,
+            wasit: 0,
+            wasitAmharic: 0
         }
     };
 
@@ -31,12 +38,19 @@ async function checkStatus() {
             stats.totalAyahs++;
             if (ayah.tafsir) {
                 if (ayah.tafsir.ibnKathirArabic) stats.tafsirCounts.ibnKathirArabic++;
+                if (ayah.tafsir.ibnKathirAmharic) stats.tafsirCounts.ibnKathirAmharic++;
                 if (ayah.tafsir.muyassar) stats.tafsirCounts.muyassar++;
+                if (ayah.tafsir.muyassarAmharic) stats.tafsirCounts.muyassarAmharic++;
                 if (ayah.tafsir.tabari) stats.tafsirCounts.tabari++;
+                if (ayah.tafsir.tabariAmharic) stats.tafsirCounts.tabariAmharic++;
                 if (ayah.tafsir.qurtubi) stats.tafsirCounts.qurtubi++;
+                if (ayah.tafsir.qurtubiAmharic) stats.tafsirCounts.qurtubiAmharic++;
                 if (ayah.tafsir.sadi) stats.tafsirCounts.sadi++;
+                if (ayah.tafsir.sadiAmharic) stats.tafsirCounts.sadiAmharic++;
                 if (ayah.tafsir.baghawi) stats.tafsirCounts.baghawi++;
+                if (ayah.tafsir.baghawiAmharic) stats.tafsirCounts.baghawiAmharic++;
                 if (ayah.tafsir.wasit) stats.tafsirCounts.wasit++;
+                if (ayah.tafsir.wasitAmharic) stats.tafsirCounts.wasitAmharic++;
             }
         }
     }

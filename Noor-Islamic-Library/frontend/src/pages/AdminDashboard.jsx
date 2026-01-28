@@ -71,9 +71,48 @@ const AdminDashboard = () => {
     const [catForm, setCatForm] = useState({ name: '', description: '', icon: '📚', type: 'Book' });
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+    const [personalData, setPersonalData] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        city: '',
+        country: '',
+        bio: 'Senior Administrator of the Noor Islamic Library System. Overseeing digital transformation and scholarly content integrity.',
+        joinDate: 'Jan 2024'
+    });
+
     useEffect(() => {
         fetchDashboardData();
+        if (view === 'profile') fetchPersonalProfile();
     }, [auth.token, view]);
+
+    const fetchPersonalProfile = async () => {
+        try {
+            const responseData = await sendRequest(
+                `http://localhost:5000/api/users/profile/${auth.userId}`,
+                'GET',
+                null,
+                { Authorization: 'Bearer ' + auth.token }
+            );
+            setPersonalData(prev => ({ ...prev, ...responseData.user }));
+        } catch (err) { }
+    };
+
+    const handleProfileUpdate = async (e) => {
+        e.preventDefault();
+        try {
+            await sendRequest(
+                `http://localhost:5000/api/users/profile/${auth.userId}`,
+                'PATCH',
+                JSON.stringify(personalData),
+                {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' + auth.token
+                }
+            );
+            alert('Security clearance updated! Profile synchronized.');
+        } catch (err) { }
+    };
 
     const fetchDashboardData = async () => {
         if (!auth.token) return;
@@ -278,106 +317,203 @@ const AdminDashboard = () => {
         </div>
     );
 
-    const renderUsers = () => (
-        <div className="users-section animate-fade">
-            <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                    <h2 style={{ fontFamily: 'Outfit', fontSize: '2rem', margin: 0 }}>Verified Personas</h2>
-                    <p style={{ color: 'var(--text-muted)' }}>Security and directory management</p>
-                </div>
-                <div className="search-bar">
-                    <input
-                        type="text"
-                        placeholder="Search by name or email..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="input-premium"
-                    />
+    const renderProfile = () => (
+        <div className="profile-section-premium animate-fade">
+            <div className="profile-hero-lux">
+                <div className="profile-banner-glow"></div>
+                <div className="profile-identity-card">
+                    <div className="profile-avatar-wrapper">
+                        <div className="profile-avatar-main">
+                            {personalData.name.charAt(0) || 'A'}
+                        </div>
+                        <div className="online-badge-pulse"></div>
+                    </div>
+                    <div className="profile-meta-main">
+                        <h2>{personalData.name || 'Administrator'}</h2>
+                        <span className="badge-root">ROOT ACCESS</span>
+                        <p className="profile-email-sub">{personalData.email}</p>
+                    </div>
+                    <div className="profile-actions-top">
+                        <button className="btn-save" onClick={handleProfileUpdate}>Sync Security Data</button>
+                    </div>
                 </div>
             </div>
 
-            <div className="users-table-container">
-                <table className="users-table">
-                    <thead>
-                        <tr>
-                            <th>User Persona</th>
-                            <th>Contact Node</th>
-                            <th>Permission</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {users.filter(u => u.name.toLowerCase().includes(searchTerm.toLowerCase())).map(user => (
-                            <tr key={user.id} className="user-table-row">
-                                <td>
-                                    <div className="user-profile-cell">
-                                        <div className="user-avatar-lux" style={{
-                                            background: user.role === 'admin' ? 'linear-gradient(135deg, #f43f5e, #fb923c)' : 'linear-gradient(135deg, #10b981, #3b82f6)'
-                                        }}>
-                                            {user.name.charAt(0)}
-                                        </div>
-                                        <div className="user-info-lux">
-                                            <span className="user-name-lux">{user.name}</span>
-                                            <span className="user-date-lux">Node Access since 2024</span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td style={{ color: 'var(--text-muted)' }}>{user.email}</td>
-                                <td><span className={`role-badge-lux ${user.role}`}>{user.role.toUpperCase()}</span></td>
-                                <td>
-                                    <div className={`status-pill-lux ${user.isActive ? 'active' : 'locked'}`}>
-                                        <span className="status-dot"></span>
-                                        {user.isActive ? 'OPERATIONAL' : 'RESTRICTED'}
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="action-buttons-lux">
-                                        <button className="btn-action-lux edit">✏️</button>
-                                        <button className="btn-action-lux block">🚫</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+            <div className="profile-details-grid">
+                <div className="dashboard-card profile-bio-section">
+                    <h3>📜 Admin Biography</h3>
+                    <textarea
+                        className="input-premium bio-textarea"
+                        value={personalData.bio}
+                        onChange={e => setPersonalData({ ...personalData, bio: e.target.value })}
+                        placeholder="Define your administrative legacy..."
+                    />
+                    <div className="admin-stats-strip">
+                        <div className="mini-stat">
+                            <span className="label">Node Status</span>
+                            <span className="value text-primary">Active</span>
+                        </div>
+                        <div className="mini-stat">
+                            <span className="label">Clearance</span>
+                            <span className="value text-accent">Level 5</span>
+                        </div>
+                        <div className="mini-stat">
+                            <span className="label">Member Since</span>
+                            <span className="value">{personalData.joinDate || '2024'}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="dashboard-card profile-form-section">
+                    <h3>⚙️ Cryptographic Identity</h3>
+                    <form className="admin-profile-form" onSubmit={handleProfileUpdate}>
+                        <div className="form-row-lux">
+                            <div className="form-group">
+                                <label>Full Legal Name</label>
+                                <input
+                                    className="input-premium"
+                                    value={personalData.name}
+                                    onChange={e => setPersonalData({ ...personalData, name: e.target.value })}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Encrypted Email</label>
+                                <input
+                                    className="input-premium"
+                                    value={personalData.email}
+                                    disabled
+                                />
+                            </div>
+                        </div>
+                        <div className="form-row-lux">
+                            <div className="form-group">
+                                <label>Contact Node (Phone)</label>
+                                <input
+                                    className="input-premium"
+                                    value={personalData.phone}
+                                    onChange={e => setPersonalData({ ...personalData, phone: e.target.value })}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Regional Sector (City)</label>
+                                <input
+                                    className="input-premium"
+                                    value={personalData.city}
+                                    onChange={e => setPersonalData({ ...personalData, city: e.target.value })}
+                                />
+                            </div>
+                        </div>
+                        <div className="form-group">
+                            <label>Geographic Node (Country)</label>
+                            <input
+                                className="input-premium"
+                                value={personalData.country}
+                                onChange={e => setPersonalData({ ...personalData, country: e.target.value })}
+                            />
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     );
 
     return (
         <div className="admin-dashboard">
-            <aside className="admin-sidebar">
-                <div className="sidebar-header">
-                    <h2><span>NOOR</span> OS</h2>
+            <aside className={`admin-sidebar ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
+                <div className="sidebar-header-lux">
+                    <div className="logo-box-lux">
+                        <div className="logo-icon-glow"></div>
+                        <span className="logo-symbol">N</span>
+                    </div>
+                    <div className="logo-text-lux">
+                        <h2>NOOR<span>OS</span></h2>
+                        <span className="system-tag">ADMIN v2.0</span>
+                    </div>
                 </div>
-                <nav className="sidebar-nav">
+
+                <div className="nav-section-label">CORE COMMANDS</div>
+                <nav className="sidebar-nav-lux">
                     {[
-                        { id: 'overview', icon: '📊', label: 'Monitor' },
-                        { id: 'users', icon: '👤', label: 'Personas' },
-                        { id: 'books', icon: '📚', label: 'Assets' },
-                        { id: 'categories', icon: '📁', label: 'Clusters' },
-                        { id: 'settings', icon: '⚙️', label: 'Config' }
+                        { id: 'overview', icon: '📊', label: 'Monitor', desc: 'System telemetry' },
+                        { id: 'users', icon: '👥', label: 'Personas', desc: 'Secure directory' },
+                        { id: 'books', icon: '📚', label: 'Assets', desc: 'Library core' },
+                        { id: 'categories', icon: '📁', label: 'Clusters', desc: 'Data taxonomy' }
                     ].map(item => (
-                        <button key={item.id} className={view === item.id ? 'active' : ''} onClick={() => setView(item.id)}>
-                            <span className="nav-icon">{item.icon}</span> {item.label}
+                        <button key={item.id} className={`nav-item-lux ${view === item.id ? 'active' : ''}`} onClick={() => { setView(item.id); setIsMobileMenuOpen(false); }}>
+                            <div className="nav-icon-box">{item.icon}</div>
+                            <div className="nav-label-box">
+                                <span className="label-main">{item.label}</span>
+                                <span className="label-sub">{item.desc}</span>
+                            </div>
+                            {view === item.id && <div className="active-indicator-lux"></div>}
                         </button>
                     ))}
-                    <button className="nav-btn-special" onClick={auth.logout} style={{ marginTop: 'auto' }}>
-                        <span className="nav-icon">🚪</span> Terminate
-                    </button>
                 </nav>
+
+                <div className="nav-section-label">IDENTITY & CONFIG</div>
+                <nav className="sidebar-nav-lux">
+                    {[
+                        { id: 'profile', icon: '🆔', label: 'Personal', desc: 'Identity node' },
+                        { id: 'settings', icon: '⚙️', label: 'Config', desc: 'Global params' }
+                    ].map(item => (
+                        <button key={item.id} className={`nav-item-lux ${view === item.id ? 'active' : ''}`} onClick={() => { setView(item.id); setIsMobileMenuOpen(false); }}>
+                            <div className="nav-icon-box">{item.icon}</div>
+                            <div className="nav-label-box">
+                                <span className="label-main">{item.label}</span>
+                                <span className="label-sub">{item.desc}</span>
+                            </div>
+                            {view === item.id && <div className="active-indicator-lux"></div>}
+                        </button>
+                    ))}
+                </nav>
+
+                <div className="sidebar-footer-lux">
+                    <div className="user-profile-preview">
+                        <div className="mini-avatar">
+                            {personalData.name.charAt(0) || 'A'}
+                            <div className="status-dot-online"></div>
+                        </div>
+                        <div className="user-details-mini">
+                            <span className="user-name">{personalData.name || 'Admin'}</span>
+                            <span className="user-role-tag">Root</span>
+                        </div>
+                        <button className="logout-trigger-lux" onClick={auth.logout} title="Terminate Session">
+                            🚪
+                        </button>
+                    </div>
+                </div>
             </aside>
+
+            {/* Mobile Header Overlay */}
+            <div className="mobile-nav-trigger-bar">
+                <div className="mobile-logo">NOOR<span>OS</span></div>
+                <button className="hamburger-lux" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+                    {isMobileMenuOpen ? '✕' : '☰'}
+                </button>
+            </div>
 
             <main className="admin-main-content">
                 <header className="admin-header">
-                    <div>
+                    <div className="header-title-area">
+                        <div className="view-indicator"></div>
                         <h1>{view === 'overview' ? 'DASHBOARD' : view.toUpperCase()}</h1>
-                        <p>Access Level: Root Administrator • {auth.userName}</p>
+                        <p className="breadcrumb-lux">ROOT // {view.toUpperCase()} // SESSION_ACTIVE</p>
                     </div>
-                    <div style={{ textAlign: 'right' }}>
-                        <div style={{ fontSize: '0.85rem', color: 'var(--text-dim)', fontWeight: '700' }}>SYSTEM STATUS</div>
-                        <div style={{ color: 'var(--primary)', fontWeight: '900', fontSize: '1.1rem' }}>NOMINAL • 99.9%</div>
+                    <div className="system-status-lux">
+                        <div className="status-grid-mini">
+                            <div className="status-item">
+                                <span className="status-label">LATENCY</span>
+                                <span className="status-value">12ms</span>
+                            </div>
+                            <div className="status-item">
+                                <span className="status-label">SECURITY</span>
+                                <span className="status-value text-primary">ENCRYPTED</span>
+                            </div>
+                        </div>
+                        <div className="pulse-container-lux">
+                            <div className="pulse-ring"></div>
+                            <div className="pulse-dot"></div>
+                        </div>
                     </div>
                 </header>
 
@@ -389,7 +525,73 @@ const AdminDashboard = () => {
                 ) : (
                     <>
                         {view === 'overview' && renderOverview()}
-                        {view === 'users' && renderUsers()}
+                        {view === 'users' && (
+                            <div className="users-section animate-fade">
+                                <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div>
+                                        <h2 style={{ fontFamily: 'Outfit', fontSize: '2rem', margin: 0 }}>Verified Personas</h2>
+                                        <p style={{ color: 'var(--text-muted)' }}>Security and directory management</p>
+                                    </div>
+                                    <div className="search-bar">
+                                        <input
+                                            type="text"
+                                            placeholder="Search by name or email..."
+                                            value={searchTerm}
+                                            onChange={(e) => setSearchTerm(e.target.value)}
+                                            className="input-premium"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="users-table-container">
+                                    <table className="users-table">
+                                        <thead>
+                                            <tr>
+                                                <th>User Persona</th>
+                                                <th>Contact Node</th>
+                                                <th>Permission</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {users.filter(u => u.name.toLowerCase().includes(searchTerm.toLowerCase())).map(user => (
+                                                <tr key={user.id} className="user-table-row">
+                                                    <td>
+                                                        <div className="user-profile-cell">
+                                                            <div className="user-avatar-lux" style={{
+                                                                background: user.role === 'admin' ? 'linear-gradient(135deg, #f43f5e, #fb923c)' : 'linear-gradient(135deg, #10b981, #3b82f6)'
+                                                            }}>
+                                                                {user.name.charAt(0)}
+                                                            </div>
+                                                            <div className="user-info-lux">
+                                                                <span className="user-name-lux">{user.name}</span>
+                                                                <span className="user-date-lux">Node Access since 2024</span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td style={{ color: 'var(--text-muted)' }}>{user.email}</td>
+                                                    <td><span className={`role-badge-lux ${user.role}`}>{user.role.toUpperCase()}</span></td>
+                                                    <td>
+                                                        <div className={`status-pill-lux ${user.isActive ? 'active' : 'locked'}`}>
+                                                            <span className="status-dot"></span>
+                                                            {user.isActive ? 'OPERATIONAL' : 'RESTRICTED'}
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div className="action-buttons-lux">
+                                                            <button className="btn-action-lux edit">✏️</button>
+                                                            <button className="btn-action-lux block">🚫</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        )}
+                        {view === 'profile' && renderProfile()}
                         {view === 'books' && (
                             <div className="users-section animate-fade">
                                 <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

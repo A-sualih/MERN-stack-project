@@ -124,14 +124,14 @@ const Home = () => {
                     </div>
 
                     <div className="card glass feature-card">
-                        <div className="feature-icon">🙏</div>
+                        <div className="feature-icon">🤲</div>
                         <h3>Duas & Azkar</h3>
                         <p style={{ color: 'var(--text-muted)' }}>Supplications from the Sunnah for morning, evening, and special occasions to keep your heart in remembrance.</p>
                         <Link to={auth.isLoggedIn ? "/library/Duas" : "/auth"} className="btn btn-outline" style={{ marginTop: 'auto' }}>Find Peace →</Link>
                     </div>
 
                     <div className="card glass feature-card">
-                        <div className="feature-icon">🐎</div>
+                        <div className="feature-icon">🕋</div>
                         <h3>Seerah (Prophetic Biography)</h3>
                         <p style={{ color: 'var(--text-muted)' }}>Detailed Seerah accounts from authentic sources to understand the mercy sent to all of mankind.</p>
                         <Link to={auth.isLoggedIn ? "/library/Seerah" : "/auth"} className="btn btn-outline" style={{ marginTop: 'auto' }}>Read History →</Link>
