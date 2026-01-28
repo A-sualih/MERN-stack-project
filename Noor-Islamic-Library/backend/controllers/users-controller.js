@@ -94,5 +94,72 @@ const login = async (req, res, next) => {
     res.json({ userId: existingUser.id, email: existingUser.email, role: existingUser.role, token: token });
 };
 
+const getProfile = async (req, res, next) => {
+    const userId = req.params.uid;
+
+    let user;
+    try {
+        user = await User.findById(userId, '-password');
+    } catch (err) {
+        return next(new HttpError('Fetching profile failed, please try again later.', 500));
+    }
+
+    if (!user) {
+        return next(new HttpError('Could not find user for the provided id.', 404));
+    }
+
+    res.json({ user: user.toObject({ getters: true }) });
+};
+
+const updateProfile = async (req, res, next) => {
+    const userId = req.params.uid;
+    const {
+        name,
+        dateOfBirth,
+        country,
+        streetAddress,
+        aptSuite,
+        city,
+        stateProvince,
+        zipPostalCode,
+        phone
+    } = req.body;
+
+    let user;
+    try {
+        user = await User.findById(userId);
+    } catch (err) {
+        return next(new HttpError('Updating profile failed, please try again later.', 500));
+    }
+
+    if (!user) {
+        return next(new HttpError('Could not find user for this id.', 404));
+    }
+
+    if (user.id !== req.userData.userId) {
+        return next(new HttpError('You are not allowed to edit this profile.', 401));
+    }
+
+    user.name = name || user.name;
+    user.dateOfBirth = dateOfBirth || user.dateOfBirth;
+    user.country = country || user.country;
+    user.streetAddress = streetAddress || user.streetAddress;
+    user.aptSuite = aptSuite || user.aptSuite;
+    user.city = city || user.city;
+    user.stateProvince = stateProvince || user.stateProvince;
+    user.zipPostalCode = zipPostalCode || user.zipPostalCode;
+    user.phone = phone || user.phone;
+
+    try {
+        await user.save();
+    } catch (err) {
+        return next(new HttpError('Updating profile failed, please try again.', 500));
+    }
+
+    res.status(200).json({ user: user.toObject({ getters: true }) });
+};
+
 exports.signup = signup;
 exports.login = login;
+exports.getProfile = getProfile;
+exports.updateProfile = updateProfile;

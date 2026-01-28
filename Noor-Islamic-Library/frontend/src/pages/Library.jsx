@@ -34,7 +34,7 @@ const Library = () => {
     };
 
     return (
-        <div className="container library-page-container">
+        <div className="container library-page-container" data-category={category}>
             <header className="library-header">
                 <h1>
                     <span>{getIcon()}</span>
@@ -49,7 +49,7 @@ const Library = () => {
             <div className={category === 'Seerah' ? "full-width-list" : "library-grid"}>
                 {items.length > 0 ? (
                     items.map(item => (
-                        <div key={item._id} className={`card glass library-card ${category === 'Seerah' ? 'seerah-detail-card' : ''}`}>
+                        <div key={item._id} className={`card glass library-card ${category === 'Seerah' ? 'seerah-detail-card' : ''} ${category === 'Fiqh' ? 'fiqh-card' : ''}`}>
                             <div className="library-card-header">
                                 <h3 className="library-card-title">{item.title}</h3>
                                 {(item.arabicText || item.translation) && (
@@ -64,7 +64,7 @@ const Library = () => {
                             </div>
 
                             {item.subTopic && (
-                                <div className="subtopic-badge">
+                                <div className={`subtopic-badge ${category === 'Fiqh' ? 'fiqh-badge' : ''}`}>
                                     {item.subTopic}
                                 </div>
                             )}
@@ -86,9 +86,9 @@ const Library = () => {
                             )}
 
                             {item.explanation && (
-                                <div className={`explanation-box ${category === 'Seerah' ? 'history-mode' : 'benefit-mode'}`}>
+                                <div className={`explanation-box ${category === 'Seerah' ? 'history-mode' : (category === 'Fiqh' ? 'law-mode' : 'benefit-mode')}`}>
                                     <strong className="explanation-label">
-                                        {category === 'Seerah' ? 'ታሪካዊ ዝርዝር (Detailed History):' : '📌 Benefit / Explanation:'}
+                                        {category === 'Seerah' ? 'ታሪካዊ ዝርዝር (Detailed History):' : (category === 'Fiqh' ? '⚖️ Ruling / Principle:' : '📌 Benefit / Explanation:')}
                                     </strong>
                                     <p className="explanation-text">{item.explanation}</p>
                                 </div>

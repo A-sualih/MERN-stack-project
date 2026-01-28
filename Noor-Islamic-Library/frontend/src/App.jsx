@@ -11,6 +11,7 @@ import Library from './pages/Library';
 import AdminDashboard from './pages/AdminDashboard';
 import ManageBooks from './pages/ManageBooks';
 import ManageCategories from './pages/ManageCategories';
+import Profile from './pages/Profile';
 import MainNavigation from './components/Navigation/MainNavigation';
 
 import { AuthContext } from './context/auth-context';
@@ -71,27 +72,37 @@ const App = () => {
     }
   }, [login, logout]);
 
-  const routes = (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/quran" element={<Quran />} />
-      <Route path="/hadith" element={<Hadith />} />
-      <Route path="/tafsir" element={<Tafsir />} />
-      <Route path="/books" element={<Books />} />
-      <Route path="/library/:category" element={<Library />} />
-      {!token && <Route path="/auth" element={<Auth />} />}
-      {token && (role === 'admin' || role === 'content-admin') && (
-        <>
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/books" element={<ManageBooks />} />
-          <Route path="/admin/categories" element={<ManageCategories />} />
-        </>
-      )}
+  let routes;
 
-
-      <Route path="*" element={<Navigate to={token ? "/" : "/auth"} />} />
-    </Routes>
-  );
+  if (token) {
+    routes = (
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/quran" element={<Quran />} />
+        <Route path="/hadith" element={<Hadith />} />
+        <Route path="/tafsir" element={<Tafsir />} />
+        <Route path="/books" element={<Books />} />
+        <Route path="/library/:category" element={<Library />} />
+        <Route path="/profile" element={<Profile />} />
+        {(role === 'admin' || role === 'content-admin') && (
+          <>
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/books" element={<ManageBooks />} />
+            <Route path="/admin/categories" element={<ManageCategories />} />
+          </>
+        )}
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    );
+  } else {
+    routes = (
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="*" element={<Navigate to="/auth" />} />
+      </Routes>
+    );
+  }
 
   return (
     <AuthContext.Provider

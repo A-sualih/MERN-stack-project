@@ -19,7 +19,9 @@ const Tafsir = () => {
         { id: 'ibnKathir', name: 'Ibn Kathir', arabicName: 'ابن كثير', field: 'ibnKathirArabic', amharicField: 'ibnKathirAmharic', color: '#d4af37' },
         { id: 'sadi', name: 'Al-Sa\'di', arabicName: 'السعدي', field: 'sadi', amharicField: 'sadiAmharic', color: '#9b59b6' },
         { id: 'tabari', name: 'Al-Tabari', arabicName: 'الطبري', field: 'tabari', amharicField: 'tabariAmharic', color: '#2ecc71' },
-        { id: 'qurtubi', name: 'Al-Qurtubi', arabicName: 'القرطبي', field: 'qurtubi', amharicField: 'qurtubiAmharic', color: '#3498db' }
+        { id: 'qurtubi', name: 'Al-Qurtubi', arabicName: 'القرطبي', field: 'qurtubi', amharicField: 'qurtubiAmharic', color: '#3498db' },
+        { id: 'baghawi', name: 'Al-Baghawi', arabicName: 'البغوي', field: 'baghawi', amharicField: 'baghawiAmharic', color: '#16a085' },
+        { id: 'wasit', name: 'Tantawi (Wasit)', arabicName: 'الوسيط', field: 'wasit', amharicField: 'wasitAmharic', color: '#e67e22' }
     ];
 
     useEffect(() => {

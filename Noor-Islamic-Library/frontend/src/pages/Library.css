@@ -5,9 +5,12 @@
 
 /* Container Enhancements */
 .library-page-container {
-    max-width: 1400px;
+    max-width: 1600px;
     margin: 0 auto;
-    padding: 20px;
+    padding: clamp(10px, 3vw, 30px);
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 /* Header Section */
@@ -16,6 +19,11 @@
     padding-bottom: 25px;
     border-bottom: 2px solid rgba(16, 185, 129, 0.2);
     text-align: center;
+}
+
+/* Fiqh Specific Header */
+.library-page-container[data-category="Fiqh"] .library-header {
+    border-bottom-color: rgba(59, 130, 246, 0.2);
 }
 
 .library-header h1 {
@@ -36,28 +44,46 @@
     margin: 0 auto;
 }
 
-/* Responsive Grid System */
+/* Responsive Grid System - Wide & Short preference */
 .library-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 350px), 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 500px), 1fr));
+    gap: clamp(20px, 4vw, 35px);
     width: 100%;
+    align-items: start;
 }
 
 /* Enhanced Library Cards */
 .library-card {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    min-height: 280px;
-    border-left: 5px solid var(--primary-light);
+    gap: 15px;
+    min-height: auto;
+    border-left: 6px solid var(--primary-light);
     background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.8));
-    padding: clamp(25px, 4vw, 35px);
+    padding: clamp(20px, 3vw, 25px);
     position: relative;
     overflow: visible;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     border-radius: 16px;
+}
+
+/* Fiqh Card Theme - Blue/Emerald Jurist Style */
+.fiqh-card {
+    border-left-color: #3b82f6 !important;
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.1), rgba(15, 23, 42, 0.8)) !important;
+}
+
+.fiqh-card:hover {
+    border-left-color: #60a5fa !important;
+    box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2) !important;
+}
+
+.fiqh-badge {
+    background: rgba(59, 130, 246, 0.1) !important;
+    color: #60a5fa !important;
+    border-color: rgba(59, 130, 246, 0.3) !important;
 }
 
 .library-card::before {
@@ -104,11 +130,12 @@
 .library-card-title {
     color: var(--secondary-light);
     margin: 0;
-    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-    font-weight: 700;
-    line-height: 1.3;
+    font-size: clamp(1.2rem, 3.5vw, 1.6rem);
+    font-weight: 800;
+    line-height: 1.35;
     flex: 1;
     min-width: 0;
+    letter-spacing: -0.02em;
 }
 
 /* Copy Button */
@@ -157,9 +184,9 @@
 /* Arabic Text Container */
 .decorative-arabic-container {
     background: radial-gradient(circle at center, #fffef0 0%, #fdf6e3 100%);
-    padding: clamp(25px, 5vw, 35px);
+    padding: clamp(15px, 3vw, 25px);
     border-radius: 14px;
-    margin: 0;
+    margin: 5px 0;
     position: relative;
     border: 2px solid #ecdca3;
     box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.05),
@@ -189,8 +216,8 @@
 /* Arabic Text */
 .arabic-text-main {
     font-family: 'Amiri', serif;
-    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
-    line-height: 2.1;
+    font-size: clamp(1.7rem, 4.2vw, 2.5rem);
+    line-height: 2.2;
     color: #1a1a1a;
     text-align: right;
     direction: rtl;
@@ -200,6 +227,7 @@
     word-wrap: break-word;
     overflow-wrap: break-word;
     hyphens: none;
+    display: block;
 }
 
 /* Explanation Box */
@@ -208,8 +236,12 @@
     padding: clamp(18px, 3.5vw, 24px);
     border-radius: 12px;
     line-height: 1.8;
-    background: rgba(16, 185, 129, 0.08);
     border-left: 4px solid var(--primary-light);
+}
+
+.explanation-box.law-mode {
+    background: rgba(59, 130, 246, 0.05);
+    border-left-color: #3b82f6;
 }
 
 .explanation-label {
@@ -295,7 +327,19 @@
     font-size: clamp(0.95rem, 2vw, 1.1rem);
 }
 
-/* Responsive Breakpoints */
+/* Responsive Breakpoints & Fine Tuning */
+
+@media (min-width: 1600px) {
+    .library-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 1400px) {
+    .library-grid {
+        grid-template-columns: 1fr;
+    }
+}
 
 /* Large Tablets and Small Desktops (768px - 1024px) */
 @media (max-width: 1024px) {
