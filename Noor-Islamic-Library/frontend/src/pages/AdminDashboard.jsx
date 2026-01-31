@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/auth-context';
 import { useHttpClient } from '../hooks/http-hook';
+import { API_BASE_URL } from '../config';
 import './AdminDashboard.css';
 
 const StatCard = ({ icon, label, value, trend, trendUp, color }) => (
@@ -89,7 +90,7 @@ const AdminDashboard = () => {
     const fetchPersonalProfile = async () => {
         try {
             const responseData = await sendRequest(
-                `http://localhost:5000/api/users/profile/${auth.userId}`,
+                `${API_BASE_URL}/api/users/profile/${auth.userId}`,
                 'GET',
                 null,
                 { Authorization: 'Bearer ' + auth.token }
@@ -102,7 +103,7 @@ const AdminDashboard = () => {
         e.preventDefault();
         try {
             await sendRequest(
-                `http://localhost:5000/api/users/profile/${auth.userId}`,
+                `${API_BASE_URL}/api/users/profile/${auth.userId}`,
                 'PATCH',
                 JSON.stringify(personalData),
                 {
@@ -118,7 +119,7 @@ const AdminDashboard = () => {
         if (!auth.token) return;
         try {
             const statsData = await sendRequest(
-                'http://localhost:5000/api/admin/stats',
+                `${API_BASE_URL}/api/admin/stats`,
                 'GET',
                 null,
                 { Authorization: 'Bearer ' + auth.token }
@@ -126,7 +127,7 @@ const AdminDashboard = () => {
             setStats(prev => ({ ...prev, ...statsData.stats }));
 
             const usersData = await sendRequest(
-                'http://localhost:5000/api/admin/users',
+                `${API_BASE_URL}/api/admin/users`,
                 'GET',
                 null,
                 { Authorization: 'Bearer ' + auth.token }
@@ -140,9 +141,9 @@ const AdminDashboard = () => {
 
     const fetchBooks = async () => {
         try {
-            const data = await sendRequest('http://localhost:5000/api/books');
+            const data = await sendRequest(`${API_BASE_URL}/api/books`);
             setBooks(data.books);
-            const catData = await sendRequest('http://localhost:5000/api/categories');
+            const catData = await sendRequest(`${API_BASE_URL}/api/categories`);
             if (catData && catData.categories) {
                 setCategories(catData.categories);
                 if (catData.categories.length > 0 && !bookForm.category) {
@@ -154,7 +155,7 @@ const AdminDashboard = () => {
 
     const fetchCategories = async () => {
         try {
-            const data = await sendRequest('http://localhost:5000/api/categories');
+            const data = await sendRequest(`${API_BASE_URL}/api/categories`);
             setCategories(data.categories);
         } catch (err) { }
     };
@@ -162,7 +163,7 @@ const AdminDashboard = () => {
     const toggleUserStatusHandler = async (userId) => {
         try {
             const response = await sendRequest(
-                `http://localhost:5000/api/admin/users/${userId}/toggle-status`,
+                `${API_BASE_URL}/api/admin/users/${userId}/toggle-status`,
                 'PATCH',
                 null,
                 { Authorization: 'Bearer ' + auth.token }
@@ -183,7 +184,7 @@ const AdminDashboard = () => {
         e.preventDefault();
         try {
             const response = await sendRequest(
-                `http://localhost:5000/api/admin/users/${selectedUser.id}`,
+                `${API_BASE_URL}/api/admin/users/${selectedUser.id}`,
                 'PATCH',
                 JSON.stringify(editForm),
                 {
@@ -216,7 +217,7 @@ const AdminDashboard = () => {
 
         try {
             const method = isEditingBook ? 'PATCH' : 'POST';
-            const url = isEditingBook ? `http://localhost:5000/api/books/${currentId}` : 'http://localhost:5000/api/books';
+            const url = isEditingBook ? `${API_BASE_URL}/api/books/${currentId}` : `${API_BASE_URL}/api/books`;
             await sendRequest(url, method, formData, { Authorization: 'Bearer ' + auth.token });
             setShowBookModal(false);
             fetchBooks();
@@ -227,7 +228,7 @@ const AdminDashboard = () => {
         e.preventDefault();
         try {
             const method = isEditingCategory ? 'PATCH' : 'POST';
-            const url = isEditingCategory ? `http://localhost:5000/api/categories/${currentId}` : 'http://localhost:5000/api/categories';
+            const url = isEditingCategory ? `${API_BASE_URL}/api/categories/${currentId}` : `${API_BASE_URL}/api/categories`;
             await sendRequest(url, method, JSON.stringify(catForm), {
                 'Content-Type': 'application/json',
                 Authorization: 'Bearer ' + auth.token
@@ -621,7 +622,7 @@ const AdminDashboard = () => {
                                                     <td>
                                                         <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                                                             <div style={{ width: '45px', height: '60px', borderRadius: '10px', background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--glass-border)', overflow: 'hidden' }}>
-                                                                {book.imageUrl ? <img src={`http://localhost:5000/${book.imageUrl}`} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : '📖'}
+                                                                {book.imageUrl ? <img src={`${API_BASE_URL}/${book.imageUrl}`} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : '📖'}
                                                             </div>
                                                             <div>
                                                                 <div style={{ fontWeight: '800', fontSize: '1rem' }}>{book.title}</div>
@@ -664,7 +665,7 @@ const AdminDashboard = () => {
                                                 <button className="btn-action-lux edit" onClick={() => { setIsEditingCategory(true); setCurrentId(cat.id); setCatForm({ ...cat }); setShowCategoryModal(true); }}>Edit Node</button>
                                                 <button className="btn-action-lux block" onClick={async () => {
                                                     if (window.confirm('De-initialize this cluster?')) {
-                                                        await sendRequest(`http://localhost:5000/api/categories/${cat.id}`, 'DELETE', null, { Authorization: 'Bearer ' + auth.token });
+                                                        await sendRequest(`${API_BASE_URL}/api/categories/${cat.id}`, 'DELETE', null, { Authorization: 'Bearer ' + auth.token });
                                                         fetchCategories();
                                                     }
                                                 }}>Purge</button>

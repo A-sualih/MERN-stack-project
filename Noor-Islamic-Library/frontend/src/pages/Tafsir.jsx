@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useHttpClient } from '../hooks/http-hook';
 import { getFromCache, saveToCache } from '../util/indexeddb';
+import { API_BASE_URL } from '../config';
 import './Tafsir.css';
 
 const Tafsir = () => {
@@ -29,7 +30,7 @@ const Tafsir = () => {
             try {
                 const cached = await getFromCache('allSurahs');
                 if (cached) setSurahs(cached);
-                const responseData = await sendRequest('http://localhost:5000/api/quran');
+                const responseData = await sendRequest(`${API_BASE_URL}/api/quran`);
                 setSurahs(responseData.surahs);
                 saveToCache('allSurahs', responseData.surahs);
             } catch (err) { }
@@ -39,7 +40,7 @@ const Tafsir = () => {
 
     const selectSurahHandler = useCallback(async (surahNumber) => {
         try {
-            const responseData = await sendRequest(`http://localhost:5000/api/quran/${surahNumber}`);
+            const responseData = await sendRequest(`${API_BASE_URL}/api/quran/${surahNumber}`);
             setSelectedSurah(responseData.surah);
             setViewMode('surah');
             setShowSurahIndex(false);

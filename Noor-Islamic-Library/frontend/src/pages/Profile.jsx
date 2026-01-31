@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/auth-context';
 import { useHttpClient } from '../hooks/http-hook';
+import { API_BASE_URL } from '../config';
 import './Profile.css';
 
 const Profile = () => {
@@ -23,7 +24,7 @@ const Profile = () => {
         const fetchUserData = async () => {
             try {
                 const responseData = await sendRequest(
-                    `http://localhost:5000/api/users/profile/${auth.userId}`,
+                    `${API_BASE_URL}/api/users/profile/${auth.userId}`,
                     'GET',
                     null,
                     { Authorization: 'Bearer ' + auth.token }
@@ -55,7 +56,7 @@ const Profile = () => {
         e.preventDefault();
         try {
             await sendRequest(
-                `http://localhost:5000/api/users/profile/${auth.userId}`,
+                `${API_BASE_URL}/api/users/profile/${auth.userId}`,
                 'PATCH',
                 JSON.stringify(userData),
                 {

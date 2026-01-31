@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHttpClient } from '../hooks/http-hook';
 import { getFromCache, saveToCache } from '../util/indexeddb';
+import { API_BASE_URL } from '../config';
 
 const Hadith = () => {
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -16,7 +17,7 @@ const Hadith = () => {
                     setCollections(cachedCollections);
                 }
 
-                const responseData = await sendRequest('http://localhost:5000/api/hadith/collections');
+                const responseData = await sendRequest(`${API_BASE_URL}/api/hadith/collections`);
                 setCollections(responseData.collections);
                 saveToCache('hadithCollections', responseData.collections);
             } catch (err) { }
@@ -26,7 +27,7 @@ const Hadith = () => {
 
     const fetchHadiths = async (col) => {
         try {
-            const responseData = await sendRequest(`http://localhost:5000/api/hadith/${col}`);
+            const responseData = await sendRequest(`${API_BASE_URL}/api/hadith/${col}`);
             setHadiths(responseData.hadiths);
         } catch (err) { }
     };
@@ -34,7 +35,7 @@ const Hadith = () => {
     const searchHandler = async (e) => {
         e.preventDefault();
         try {
-            const responseData = await sendRequest(`http://localhost:5000/api/hadith/search?q=${searchTerm}`);
+            const responseData = await sendRequest(`${API_BASE_URL}/api/hadith/search?q=${searchTerm}`);
             setHadiths(responseData.result);
         } catch (err) { }
     };

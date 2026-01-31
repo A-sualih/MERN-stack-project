@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHttpClient } from '../hooks/http-hook';
 import { useParams } from 'react-router-dom';
+import { API_BASE_URL } from '../config';
 import './Library.css';
 
 const Library = () => {
@@ -11,7 +12,7 @@ const Library = () => {
     useEffect(() => {
         const fetchItems = async () => {
             try {
-                const responseData = await sendRequest(`http://localhost:5000/api/library/category/${category}`);
+                const responseData = await sendRequest(`${API_BASE_URL}/api/library/category/${category}`);
                 setItems(responseData.items);
             } catch (err) { }
         };

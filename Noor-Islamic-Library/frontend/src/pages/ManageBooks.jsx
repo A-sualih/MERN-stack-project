@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../context/auth-context';
 import { useHttpClient } from '../hooks/http-hook';
+import { API_BASE_URL } from '../config';
 import './AdminDashboard.css';
 
 const ManageBooks = () => {
@@ -28,9 +29,9 @@ const ManageBooks = () => {
 
     const fetchData = async () => {
         try {
-            const booksData = await sendRequest('http://localhost:5000/api/books');
+            const booksData = await sendRequest(`${API_BASE_URL}/api/books`);
             setBooks(booksData.books);
-            const catsData = await sendRequest('http://localhost:5000/api/categories');
+            const catsData = await sendRequest(`${API_BASE_URL}/api/categories`);
             setCategories(catsData.categories);
             if (catsData.categories.length > 0) {
                 setForm(prev => ({ ...prev, category: catsData.categories[0].name }));
@@ -57,14 +58,14 @@ const ManageBooks = () => {
         try {
             if (isEditing) {
                 await sendRequest(
-                    `http://localhost:5000/api/books/${currentBookId}`,
+                    `${API_BASE_URL}/api/books/${currentBookId}`,
                     'PATCH',
                     formData,
                     { Authorization: 'Bearer ' + auth.token }
                 );
             } else {
                 await sendRequest(
-                    'http://localhost:5000/api/books',
+                    `${API_BASE_URL}/api/books`,
                     'POST',
                     formData,
                     { Authorization: 'Bearer ' + auth.token }
@@ -85,7 +86,7 @@ const ManageBooks = () => {
     const deleteHandler = async (id) => {
         if (!window.confirm('Delete this book?')) return;
         try {
-            await sendRequest(`http://localhost:5000/api/books/${id}`, 'DELETE', null, {
+            await sendRequest(`${API_BASE_URL}/api/books/${id}`, 'DELETE', null, {
                 Authorization: 'Bearer ' + auth.token
             });
             setBooks(prev => prev.filter(b => b.id !== id));

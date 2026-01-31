@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useHttpClient } from '../hooks/http-hook';
 import { AuthContext } from '../context/auth-context';
+import { API_BASE_URL } from '../config';
 
 const Books = () => {
     const auth = useContext(AuthContext);
@@ -17,7 +18,7 @@ const Books = () => {
     const fetchBooks = async () => {
         try {
             console.log('[Books] Fetching books...');
-            const responseData = await sendRequest('http://localhost:5000/api/books');
+            const responseData = await sendRequest(`${API_BASE_URL}/api/books`);
             console.log('[Books] Fetch success:', responseData.books.length, 'books found');
             setBooks(responseData.books);
         } catch (err) {
@@ -42,7 +43,7 @@ const Books = () => {
         try {
             console.log('[Books] Submitting book with token:', auth.token ? auth.token.substring(0, 10) + '...' : 'NONE');
             await sendRequest(
-                'http://localhost:5000/api/books',
+                `${API_BASE_URL}/api/books`,
                 'POST',
                 formData,
                 { Authorization: 'Bearer ' + auth.token }
@@ -103,7 +104,7 @@ const Books = () => {
                             </span>
                         </div>
                         <a
-                            href={`http://localhost:5000/${b.pdfUrl}`}
+                            href={`${API_BASE_URL}/${b.pdfUrl}`}
                             target="_blank"
                             rel="noreferrer"
                             className="btn btn-outline"

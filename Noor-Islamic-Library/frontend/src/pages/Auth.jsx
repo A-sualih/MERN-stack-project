@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/auth-context';
 import { useHttpClient } from '../hooks/http-hook';
+import { API_BASE_URL } from '../config';
 
 const Auth = () => {
     const auth = useContext(AuthContext);
@@ -28,7 +29,7 @@ const Auth = () => {
         if (isLoginMode) {
             try {
                 const responseData = await sendRequest(
-                    'http://localhost:5000/api/users/login',
+                    `${API_BASE_URL}/api/users/login`,
                     'POST',
                     JSON.stringify({
                         email: formData.email,
@@ -42,7 +43,7 @@ const Auth = () => {
         } else {
             try {
                 const responseData = await sendRequest(
-                    'http://localhost:5000/api/users/signup',
+                    `${API_BASE_URL}/api/users/signup`,
                     'POST',
                     JSON.stringify({
                         name: formData.name,

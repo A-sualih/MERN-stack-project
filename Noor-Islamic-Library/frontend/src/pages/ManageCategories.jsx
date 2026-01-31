@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../context/auth-context';
 import { useHttpClient } from '../hooks/http-hook';
+import { API_BASE_URL } from '../config';
 import './AdminDashboard.css';
 
 const ManageCategories = () => {
@@ -23,7 +24,7 @@ const ManageCategories = () => {
 
     const fetchCategories = async () => {
         try {
-            const data = await sendRequest('http://localhost:5000/api/categories');
+            const data = await sendRequest(`${API_BASE_URL}/api/categories`);
             setCategories(data.categories);
         } catch (err) { }
     };
@@ -33,7 +34,7 @@ const ManageCategories = () => {
         try {
             if (isEditing) {
                 await sendRequest(
-                    `http://localhost:5000/api/categories/${currentId}`,
+                    `${API_BASE_URL}/api/categories/${currentId}`,
                     'PATCH',
                     JSON.stringify(form),
                     {
@@ -43,7 +44,7 @@ const ManageCategories = () => {
                 );
             } else {
                 await sendRequest(
-                    'http://localhost:5000/api/categories',
+                    `${API_BASE_URL}/api/categories`,
                     'POST',
                     JSON.stringify(form),
                     {
@@ -67,7 +68,7 @@ const ManageCategories = () => {
     const deleteHandler = async (id) => {
         if (!window.confirm('Delete this category?')) return;
         try {
-            await sendRequest(`http://localhost:5000/api/categories/${id}`, 'DELETE', null, {
+            await sendRequest(`${API_BASE_URL}/api/categories/${id}`, 'DELETE', null, {
                 Authorization: 'Bearer ' + auth.token
             });
             setCategories(prev => prev.filter(c => c.id !== id));

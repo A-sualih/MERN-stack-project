@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useHttpClient } from '../hooks/http-hook';
 import { getFromCache, saveToCache } from '../util/indexeddb';
+import { API_BASE_URL } from '../config';
 import './Quran.css';
 
 const Quran = () => {
@@ -29,7 +30,7 @@ const Quran = () => {
                     setSurahs(cachedSurahs);
                 }
 
-                const responseData = await sendRequest('http://localhost:5000/api/quran');
+                const responseData = await sendRequest(`${API_BASE_URL}/api/quran`);
                 setSurahs(responseData.surahs);
                 saveToCache('allSurahs', responseData.surahs);
             } catch (err) { }
@@ -43,7 +44,7 @@ const Quran = () => {
             if (cached) {
                 setPageAyahs(cached);
             }
-            const responseData = await sendRequest(`http://localhost:5000/api/quran/page/${page}`);
+            const responseData = await sendRequest(`${API_BASE_URL}/api/quran/page/${page}`);
             setPageAyahs(responseData.ayahs);
             saveToCache(`quranPage_${page}`, responseData.ayahs);
         } catch (err) { }
@@ -57,7 +58,7 @@ const Quran = () => {
 
     const selectSurahHandler = async (sid) => {
         try {
-            const responseData = await sendRequest(`http://localhost:5000/api/quran/${sid}`);
+            const responseData = await sendRequest(`${API_BASE_URL}/api/quran/${sid}`);
             setSelectedSurah(responseData.surah);
             setViewMode('surah');
             setShowIndex(false); // Close index on selection
