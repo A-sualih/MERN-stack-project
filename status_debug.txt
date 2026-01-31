@@ -1,0 +1,149 @@
+On branch main
+Your branch and 'origin/main' have diverged,
+and have 1 and 1 different commits each, respectively.
+  (use "git pull" if you want to integrate the remote branch with yours)
+
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Changes to be committed:
+	deleted:    Noor-Islamic-Library/ADMIN_DASHBOARD_GUIDE.md
+	deleted:    Noor-Islamic-Library/DUAS_PAGE_REDESIGN.md
+	deleted:    Noor-Islamic-Library/DUAS_SPACING_IMPROVEMENTS.md
+	deleted:    Noor-Islamic-Library/FIQH_PAGE_REDESIGN.md
+	deleted:    Noor-Islamic-Library/SURAH_INDEX_REDESIGN.md
+	deleted:    Noor-Islamic-Library/backend/all_arabic_tafsirs.json
+	deleted:    Noor-Islamic-Library/backend/amharic_hadiths.json
+	deleted:    Noor-Islamic-Library/backend/app.js
+	deleted:    Noor-Islamic-Library/backend/auto_translate_hadiths.js
+	deleted:    Noor-Islamic-Library/backend/check-ayah.js
+	deleted:    Noor-Islamic-Library/backend/check-harakat.js
+	deleted:    Noor-Islamic-Library/backend/complete_tafsirs_list.json
+	deleted:    Noor-Islamic-Library/backend/controllers/admin-controllers.js
+	deleted:    Noor-Islamic-Library/backend/controllers/bookmarks-controller.js
+	deleted:    Noor-Islamic-Library/backend/controllers/books-controller.js
+	deleted:    Noor-Islamic-Library/backend/controllers/category-controllers.js
+	deleted:    Noor-Islamic-Library/backend/controllers/hadith-controller.js
+	deleted:    Noor-Islamic-Library/backend/controllers/library-controller.js
+	deleted:    Noor-Islamic-Library/backend/controllers/notes-controller.js
+	deleted:    Noor-Islamic-Library/backend/controllers/quran-controller.js
+	deleted:    Noor-Islamic-Library/backend/controllers/users-controller.js
+	deleted:    Noor-Islamic-Library/backend/fetch-tafsirs-with-translation.js
+	deleted:    Noor-Islamic-Library/backend/full-quran-seed.js
+	deleted:    Noor-Islamic-Library/backend/get-all-tafsirs.js
+	deleted:    Noor-Islamic-Library/backend/get-tafsirs.js
+	deleted:    Noor-Islamic-Library/backend/make-admin.js
+	deleted:    Noor-Islamic-Library/backend/manage-admins.js
+	deleted:    Noor-Islamic-Library/backend/middleware/check-admin.js
+	deleted:    Noor-Islamic-Library/backend/middleware/check-auth.js
+	deleted:    Noor-Islamic-Library/backend/middleware/file-upload.js
+	deleted:    Noor-Islamic-Library/backend/models/book.js
+	deleted:    Noor-Islamic-Library/backend/models/bookmark.js
+	deleted:    Noor-Islamic-Library/backend/models/category.js
+	deleted:    Noor-Islamic-Library/backend/models/hadith.js
+	deleted:    Noor-Islamic-Library/backend/models/http-error.js
+	deleted:    Noor-Islamic-Library/backend/models/library-item.js
+	deleted:    Noor-Islamic-Library/backend/models/note.js
+	deleted:    Noor-Islamic-Library/backend/models/quran.js
+	deleted:    Noor-Islamic-Library/backend/models/user.js
+	deleted:    Noor-Islamic-Library/backend/package-lock.json
+	deleted:    Noor-Islamic-Library/backend/package.json
+	deleted:    Noor-Islamic-Library/backend/populate-all-tafsirs.js
+	deleted:    Noor-Islamic-Library/backend/populate-arabic-tafsir-fixed.js
+	deleted:    Noor-Islamic-Library/backend/populate-arabic-tafsir.js
+	deleted:    Noor-Islamic-Library/backend/populate-range.js
+	deleted:    Noor-Islamic-Library/backend/populate-tafsir-library.js
+	deleted:    Noor-Islamic-Library/backend/reset-password.js
+	deleted:    Noor-Islamic-Library/backend/routes/admin-routes.js
+	deleted:    Noor-Islamic-Library/backend/routes/bookmarks-routes.js
+	deleted:    Noor-Islamic-Library/backend/routes/books-routes.js
+	deleted:    Noor-Islamic-Library/backend/routes/category-routes.js
+	deleted:    Noor-Islamic-Library/backend/routes/hadith-routes.js
+	deleted:    Noor-Islamic-Library/backend/routes/library-routes.js
+	deleted:    Noor-Islamic-Library/backend/routes/notes-routes.js
+	deleted:    Noor-Islamic-Library/backend/routes/quran-routes.js
+	deleted:    Noor-Islamic-Library/backend/routes/users-routes.js
+	deleted:    Noor-Islamic-Library/backend/seed-duas.js
+	deleted:    Noor-Islamic-Library/backend/seed-fiqh.js
+	deleted:    Noor-Islamic-Library/backend/seed-seerah.js
+	deleted:    Noor-Islamic-Library/backend/seed.js
+	deleted:    Noor-Islamic-Library/backend/test-bulk-tafsir.js
+	deleted:    Noor-Islamic-Library/backend/test-ids.js
+	deleted:    Noor-Islamic-Library/backend/test-single-verse.js
+	deleted:    Noor-Islamic-Library/backend/test-tafsir-api.js
+	deleted:    Noor-Islamic-Library/backend/update-arabic-text.js
+	deleted:    Noor-Islamic-Library/backend/uploads/books/b0fd7f9b-303e-4e39-8b6c-33b4d1d97f47.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/103a77bf-c130-414e-87e8-42ed1d370fd5.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/137e070a-ff7d-4769-8d6a-dcd563391e64.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/1ed0bc9c-c46e-4989-a6ac-f7efa4dd4338.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/1f644495-dae2-4e3c-ba1a-95c71fd490eb.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/264c6c61-b6fa-4630-b3ba-e8336dd53f06.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/3844f06e-6304-48a7-aa4c-cb3396582908.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/39585e0a-d553-4624-892f-ae10954134ea.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/4790d8e4-fae2-4bdc-a528-ea2371b47608.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/4b19be2f-3d01-48aa-9762-1fe2671b36f7.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/538ceaf3-c0aa-4e34-8fae-e0f653acbacb.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/55e4d411-05ac-4353-8fca-d0d47a1f3f3f.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/5fcb4a30-4ac8-4f0c-b343-081ed386a8b7.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/69aab43c-0b29-430b-b976-41d08926ee9a.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/7ad18983-18ec-458c-ae29-e8f77e53173a.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/83201e33-0e5a-4d0c-8930-25ea0d156f41.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/8a30c8b1-7fa2-434c-9f70-c14c6329dbf6.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/9b6b03bc-7ba9-4f65-8bf5-58a3a24a146d.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/add6221d-14f3-4e96-a3bd-fced10ee0cfe.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/b405f483-3fd7-45d5-8f67-bb5ca3aad0c5.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/b8e26998-174d-4596-a9d2-0d5a373a6152.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/bdcf0920-d7c6-4dd6-bf63-786db002aa3d.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/c6262019-1528-4b15-b0a1-40cbe5316b62.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/d4a1b94a-421c-40e7-a85c-6736358424b4.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/d505c278-5a0d-4734-96e7-ce754a26a9fb.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/ddb73325-26dd-4793-be7c-625fda50e3f1.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/e28141ab-4f49-4612-99aa-773018365b2b.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/e41e8a36-02f4-448c-a0cf-da7d1d09c279.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/e884d9b0-e6cc-4492-bfc3-603bea116419.pdf
+	deleted:    Noor-Islamic-Library/backend/uploads/books/pdfs/ec8e8673-bd64-4dbf-bf98-696de6d059d7.pdf
+	deleted:    Noor-Islamic-Library/frontend/.gitignore
+	deleted:    Noor-Islamic-Library/frontend/README.md
+	deleted:    Noor-Islamic-Library/frontend/eslint.config.js
+	deleted:    Noor-Islamic-Library/frontend/package-lock.json
+	deleted:    Noor-Islamic-Library/frontend/package.json
+	deleted:    Noor-Islamic-Library/frontend/public/vite.svg
+	deleted:    Noor-Islamic-Library/frontend/src/App.css
+	deleted:    Noor-Islamic-Library/frontend/src/App.jsx
+	deleted:    Noor-Islamic-Library/frontend/src/assets/react.svg
+	deleted:    Noor-Islamic-Library/frontend/src/components/Navigation/MainNavigation.jsx
+	deleted:    Noor-Islamic-Library/frontend/src/context/auth-context.js
+	deleted:    Noor-Islamic-Library/frontend/src/hooks/http-hook.js
+	deleted:    Noor-Islamic-Library/frontend/src/index.css
+	deleted:    Noor-Islamic-Library/frontend/src/main.jsx
+	deleted:    Noor-Islamic-Library/frontend/src/pages/Auth.jsx
+	deleted:    Noor-Islamic-Library/frontend/src/pages/Books.jsx
+	deleted:    Noor-Islamic-Library/frontend/src/pages/Hadith.jsx
+	deleted:    Noor-Islamic-Library/frontend/src/pages/Home.css
+	deleted:    Noor-Islamic-Library/frontend/src/pages/Library.css
+	deleted:    Noor-Islamic-Library/frontend/src/pages/ManageBooks.jsx
+	deleted:    Noor-Islamic-Library/frontend/src/pages/ManageCategories.jsx
+	deleted:    Noor-Islamic-Library/frontend/src/pages/Profile.css
+	deleted:    Noor-Islamic-Library/frontend/src/pages/Profile.jsx
+	deleted:    Noor-Islamic-Library/frontend/src/pages/Quran.css
+	deleted:    Noor-Islamic-Library/frontend/src/pages/Quran.jsx
+	deleted:    Noor-Islamic-Library/frontend/src/pages/Tafsir.css
+	deleted:    Noor-Islamic-Library/frontend/src/pages/Tafsir.jsx
+	deleted:    Noor-Islamic-Library/frontend/src/util/indexeddb.js
+	deleted:    Noor-Islamic-Library/frontend/vite.config.js
+
+Unmerged paths:
+  (use "git add/rm <file>..." as appropriate to mark resolution)
+	deleted by them: Noor-Islamic-Library/backend/check-tafsir-status.js
+	deleted by them: Noor-Islamic-Library/frontend/index.html
+	deleted by them: Noor-Islamic-Library/frontend/src/components/Navigation/NavLinks.jsx
+	deleted by them: Noor-Islamic-Library/frontend/src/pages/AdminDashboard.css
+	deleted by them: Noor-Islamic-Library/frontend/src/pages/AdminDashboard.jsx
+	deleted by them: Noor-Islamic-Library/frontend/src/pages/Home.jsx
+	deleted by them: Noor-Islamic-Library/frontend/src/pages/Library.jsx
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	status_debug.txt
+
