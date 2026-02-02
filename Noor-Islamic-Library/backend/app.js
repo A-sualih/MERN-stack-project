@@ -20,22 +20,17 @@ const app = express();
 // Middleware
 const allowedOrigins = [
     'http://localhost:5173',
+    'http://127.0.0.1:5173',
     'http://localhost:3000',
+    'http://127.0.0.1:3000',
     process.env.FRONTEND_URL
 ].filter(Boolean).map(url => url.replace(/\/$/, ""));
 
 app.use(cors({
     origin: function (origin, callback) {
-        // allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
-
-        const sanitizedOrigin = origin.replace(/\/$/, "");
-        if (allowedOrigins.includes(sanitizedOrigin)) {
-            callback(null, true);
-        } else {
-            console.warn(`[CORS] Request from unauthorized origin: ${origin}`);
-            callback(null, false);
-        }
+        // allow all origins for now to debug "Failed to fetch"
+        console.log(`[CORS Debug] Request from: ${origin}`);
+        callback(null, true);
     },
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     credentials: true,

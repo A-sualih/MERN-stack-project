@@ -56,11 +56,13 @@ const Home = () => {
                             <button className="search-submit">Explore</button>
                         </div>
                         <div className="search-tags">
-                            <span>Quick Access:</span>
-                            <Link to="/quran">Qur'an</Link>
-                            <Link to="/hadith">Bukhari</Link>
-                            <Link to="/library/Seerah">Seerah</Link>
-                            <Link to="/books">PDF Books</Link>
+                            <span className="quick-access-label">Quick Access:</span>
+                            <div className="tags-wrapper">
+                                <Link to="/quran" className="tag-chip"><span>📖</span> Qur'an</Link>
+                                <Link to="/hadith" className="tag-chip"><span>📜</span> Bukhari</Link>
+                                <Link to="/library/Seerah" className="tag-chip"><span>🕋</span> Seerah</Link>
+                                <Link to="/books" className="tag-chip"><span>📚</span> PDF Books</Link>
+                            </div>
                         </div>
                     </div>
                 </div>
