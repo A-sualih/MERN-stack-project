@@ -28,9 +28,16 @@ const allowedOrigins = [
 
 app.use(cors({
     origin: function (origin, callback) {
-        // allow all origins for now to debug "Failed to fetch"
-        console.log(`[CORS Debug] Request from: ${origin}`);
-        callback(null, true);
+        // allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+
+        const sanitizedOrigin = origin.replace(/\/$/, "");
+        if (allowedOrigins.includes(sanitizedOrigin)) {
+            callback(null, true);
+        } else {
+            console.warn(`[CORS] Request from unauthorized origin: ${origin}`);
+            callback(null, false);
+        }
     },
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     credentials: true,
