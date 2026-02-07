@@ -26,22 +26,11 @@ const allowedOrigins = [
     process.env.FRONTEND_URL
 ].filter(Boolean).map(url => url.replace(/\/$/, ""));
 
+// Change from line 29-45 to this:
 app.use(cors({
-    origin: function (origin, callback) {
-        // allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
-
-        const sanitizedOrigin = origin.replace(/\/$/, "");
-        if (allowedOrigins.includes(sanitizedOrigin)) {
-            callback(null, true);
-        } else {
-            console.warn(`[CORS] Request from unauthorized origin: ${origin}`);
-            callback(null, false);
-        }
-    },
-    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+    origin: true, // This allows ALL origins temporarily to verify the connection
     credentials: true,
-    optionsSuccessStatus: 200
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
 }));
 
 app.use(express.json());
